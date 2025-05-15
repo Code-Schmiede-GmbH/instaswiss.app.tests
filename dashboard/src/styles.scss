@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+@use './theme' as theme;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: theme.$primary-palette,
+        tertiary: theme.$tertiary-palette,
+      ),
+      typography: (
+        plain-family: 'Calibri, sans-serif',
+        bold-weight: 900,
+        medium-weight: 500,
+        regular-weight: 300,
+      ),
+      density: 0,
+    )
+  );
+}
+
+body {
+  background: #f4f8fb;
+  color: #222;
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, .mat-card-title, mat-card-title {
+  color: #222 !important;
+  font-weight: 700;
+}
+
+h4, h5, h6 {
+  color: #333;
+  font-weight: 600;
+}
+
+.accent, .mat-accent {
+  color: #0099cc !important;
+  font-weight: 600;
+}

@@ -1,0 +1,26 @@
+mat-list-item {
+  border-bottom: 1px solid var(--mat-sys-surface-container);
+  &:last-child { border-bottom: none; }
+  padding: 16px 0;
+}
+
+.test-status {
+  font-weight: bold;
+}
+
+.passed {
+  color: #27ae60 !important;
+}
+
+.failed {
+  color: #e74c3c !important;
+}
+
+.test-name {
+  color: #222;
+  font-weight: 500;
+}
+
+.test-message {
+  color: #555;
+}

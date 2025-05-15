@@ -1,0 +1,15 @@
+<p>test-results works!</p>
+
+<mat-list>
+  @for (result of testResults(); track result.name) {
+    <mat-list-item [ngClass]="{ 'passed': result.passed, 'failed': !result.passed }">
+      <span class="test-name">{{ result.name }}</span>
+      <span class="test-status" style="margin-left: 1rem; font-weight: bold;" [style.color]="result.passed ? 'green' : 'red'">
+        {{ result.passed ? 'PASS' : 'FAIL' }}
+      </span>
+      @if (result.message) {
+        <span class="test-message" style="margin-left: 1rem;">({{ result.message }})</span>
+      }
+    </mat-list-item>
+  }
+</mat-list>
