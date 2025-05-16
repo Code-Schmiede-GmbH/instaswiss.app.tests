@@ -10,9 +10,9 @@ export class Step2HikeDurationTest extends BaseHikeTest {
     const durations = hikes.map((h: any) => h.hike_duration_in_min).filter((d: any) => typeof d === 'number');
     if (durations.length === 0) {
       return {
-        name: 'Filter by Hike Duration',
+        name: 'Filtern nach Wanderungsdauer',
         passed: false,
-        message: 'No hikes with hike_duration_in_min found',
+        message: 'Keine Wanderungen mit hike_duration_in_min gefunden',
       };
     }
     const minDuration = Math.min(...durations);
@@ -22,9 +22,9 @@ export class Step2HikeDurationTest extends BaseHikeTest {
       { label: `min=${minDuration}`, payload: { minDuration } },
       { label: `max=${maxDuration}`, payload: { maxDuration } },
       { label: `min=${minDuration}&max=${maxDuration}`, payload: { minDuration, maxDuration } },
-      { label: 'all', payload: {} },
+      { label: 'alle', payload: {} },
       // Add a mid-range test
-      { label: 'mid-range', payload: { minDuration: minDuration + 10, maxDuration: maxDuration - 10 } },
+      { label: 'mittlerer Bereich', payload: { minDuration: minDuration + 10, maxDuration: maxDuration - 10 } },
     ];
     let correct: string[] = [];
     let missing: string[] = [];
@@ -43,7 +43,7 @@ export class Step2HikeDurationTest extends BaseHikeTest {
       const { res, data } = await this.postJson(payload);
       if (!res.ok || !Array.isArray(data.hike_ids)) {
         missing.push(test.label);
-        details.push(`API error for ${test.label}: ${data.error || 'API error'}`);
+        details.push(`API-Fehler für ${test.label}: ${data.error || 'API-Fehler'}`);
         continue;
       }
       const returned = data.hike_ids;
@@ -53,14 +53,14 @@ export class Step2HikeDurationTest extends BaseHikeTest {
         details.push(`OK: ${test.label}`);
       } else {
         missing.push(test.label);
-        details.push(`Missing hike(s) for ${test.label}: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
+        details.push(`Fehlende Wanderung(en) für ${test.label}: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
       }
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by Hike Duration',
+      name: 'Filtern nach Wanderungsdauer',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
+      message: `Korrekt: ${correct.join(', ') || 'keine'} | Falsch: ${missing.join(', ') || 'keine'}\nDetails:\n${details.join('\n')}`,
     };
   }
 } 

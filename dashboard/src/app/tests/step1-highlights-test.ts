@@ -100,16 +100,16 @@ export class Step1HighlightsTest {
     }
     if (checked === 0) {
       return {
-        name: 'Filter by Highlights',
+        name: 'Filtern nach Highlights',
         passed: false,
-        message: 'No published hikes found with any highlight',
+        message: 'Keine veröffentlichten Wanderungen mit einem Highlight gefunden',
       };
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by Highlights',
+      name: 'Filtern nach Highlights',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
+      message: `Korrekt: ${correct.join(', ') || 'keine'} | Falsch: ${missing.join(', ') || 'keine'}\nDetails:\n${details.join('\n')}`,
     };
   }
 }

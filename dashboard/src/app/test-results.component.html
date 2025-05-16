@@ -1,8 +1,8 @@
 @if (loading()) {
-  <div>Running tests...</div>
+  <div>Tests werden ausgeführt...</div>
 }
 <button mat-raised-button color="primary" (click)="runTests()" [disabled]="loading()" style="margin-bottom: 1em;">
-  Run Tests
+  Tests ausführen
 </button>
 @if (!loading()) {
   <mat-list>

@@ -35,7 +35,7 @@ export class Step2TechnicalDifficultyTest {
       checked++;
       if (!res.ok || !Array.isArray(data.hike_ids)) {
         missing.push(`technisch=${tech}`);
-        details.push(`API error for technisch=${tech}: ${data.error || 'API error'}`);
+        details.push(`API-Fehler für technisch=${tech}: ${data.error || 'API-Fehler'}`);
         continue;
       }
       const returned = data.hike_ids;
@@ -45,21 +45,21 @@ export class Step2TechnicalDifficultyTest {
         details.push(`OK: technisch=${tech}`);
       } else {
         missing.push(`technisch=${tech}`);
-        details.push(`Missing hike(s) for technisch=${tech}: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
+        details.push(`Fehlende Wanderung(en) für technisch=${tech}: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
       }
     }
     if (checked === 0) {
       return {
-        name: 'Filter by Technical Difficulty',
+        name: 'Filtern nach technischer Schwierigkeit',
         passed: false,
-        message: 'No published hikes found for technical difficulty',
+        message: 'Keine veröffentlichten Wanderungen für technische Schwierigkeit gefunden',
       };
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by Technical Difficulty',
+      name: 'Filtern nach technischer Schwierigkeit',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
+      message: `Korrekt: ${correct.join(', ') || 'keine'} | Falsch: ${missing.join(', ') || 'keine'}\nDetails:\n${details.join('\n')}`,
     };
   }
 } 

@@ -35,7 +35,7 @@ export class Step2ConditionalDifficultyTest {
       checked++;
       if (!res.ok || !Array.isArray(data.hike_ids)) {
         missing.push(`konditionell=${cond}`);
-        details.push(`API error for konditionell=${cond}: ${data.error || 'API error'}`);
+        details.push(`API-Fehler für konditionell=${cond}: ${data.error || 'API-Fehler'}`);
         continue;
       }
       const returned = data.hike_ids;
@@ -45,21 +45,21 @@ export class Step2ConditionalDifficultyTest {
         details.push(`OK: konditionell=${cond}`);
       } else {
         missing.push(`konditionell=${cond}`);
-        details.push(`Missing hike(s) for konditionell=${cond}: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
+        details.push(`Fehlende Wanderung(en) für konditionell=${cond}: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
       }
     }
     if (checked === 0) {
       return {
-        name: 'Filter by Conditional Difficulty',
+        name: 'Filtern nach konditioneller Schwierigkeit',
         passed: false,
-        message: 'No published hikes found for conditional difficulty',
+        message: 'Keine veröffentlichten Wanderungen für konditionelle Schwierigkeit gefunden',
       };
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by Conditional Difficulty',
+      name: 'Filtern nach konditioneller Schwierigkeit',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
+      message: `Korrekt: ${correct.join(', ') || 'keine'} | Falsch: ${missing.join(', ') || 'keine'}\nDetails:\n${details.join('\n')}`,
     };
   }
 } 

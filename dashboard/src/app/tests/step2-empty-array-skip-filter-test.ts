@@ -29,14 +29,14 @@ export class Step2EmptyArraySkipFilterTest {
       const missingIds = hikes.map((h: any) => h.id).filter((id: string) => !dataEmptyTech.hike_ids.includes(id));
       if (missingIds.length === 0) {
         correct.push('technisch=[]');
-        details.push('OK: technisch=[] (all hikes returned)');
+        details.push('OK: technisch=[] (alle Wanderungen zurückgegeben)');
       } else {
         missing.push('technisch=[]');
-        details.push(`Missing hike(s) for technisch=[]: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
+        details.push(`Fehlende Wanderung(en) für technisch=[]: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
       }
     } else {
       missing.push('technisch=[]');
-      details.push('API error for technisch=[]');
+      details.push('API-Fehler für technisch=[]');
     }
     // konditionell=[]
     const payloadEmptyCond = { json_data: { step2: { konditionell: [] } } };
@@ -54,27 +54,27 @@ export class Step2EmptyArraySkipFilterTest {
       const missingIds = hikes.map((h: any) => h.id).filter((id: string) => !dataEmptyCond.hike_ids.includes(id));
       if (missingIds.length === 0) {
         correct.push('konditionell=[]');
-        details.push('OK: konditionell=[] (all hikes returned)');
+        details.push('OK: konditionell=[] (alle Wanderungen zurückgegeben)');
       } else {
         missing.push('konditionell=[]');
-        details.push(`Missing hike(s) for konditionell=[]: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
+        details.push(`Fehlende Wanderung(en) für konditionell=[]: ${missingIds.map((id: string) => publishedHikeIdToName[id]).join(', ')}`);
       }
     } else {
       missing.push('konditionell=[]');
-      details.push('API error for konditionell=[]');
+      details.push('API-Fehler für konditionell=[]');
     }
     if (checked === 0) {
       return {
-        name: 'Filter by Technical/Conditional Difficulty (Empty Array)',
+        name: 'Filtern nach technischer/konditioneller Schwierigkeit (leeres Array)',
         passed: false,
-        message: 'No published hikes found for empty array skip filter',
+        message: 'Keine veröffentlichten Wanderungen für leeres Array Skip-Filter gefunden',
       };
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by Technical/Conditional Difficulty (Empty Array)',
+      name: 'Filtern nach technischer/konditioneller Schwierigkeit (leeres Array)',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
+      message: `Korrekt: ${correct.join(', ') || 'keine'} | Falsch: ${missing.join(', ') || 'keine'}\nDetails:\n${details.join('\n')}`,
     };
   }
 } 

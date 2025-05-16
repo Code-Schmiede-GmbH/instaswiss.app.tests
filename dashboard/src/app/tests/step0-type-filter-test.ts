@@ -87,16 +87,16 @@ export class Step0TypeFilterTest {
     }
     if (checked === 0) {
       return {
-        name: 'Filter by hike type',
+        name: 'Filtern nach Wandertyp',
         passed: false,
-        message: 'No published hikes found with any type',
+        message: 'Keine veröffentlichten Wanderungen mit einem Typ gefunden',
       };
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by hike type',
+      name: 'Filtern nach Wandertyp',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
+      message: `Korrekt: ${correct.join(', ') || 'keine'} | Falsch: ${missing.join(', ') || 'keine'}\nDetails:\n${details.join('\n')}`,
     };
   }
 } 
