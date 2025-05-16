@@ -22,6 +22,9 @@ import { MatCardModule } from '@angular/material/card';
             Speichern
           </button>
         </form>
+        <button mat-stroked-button color="warn" style="margin-top: 16px; width: 100%;" (click)="onRemove()">
+          Entfernen
+        </button>
       </mat-card-content>
     </mat-card>
   `,
@@ -30,8 +33,13 @@ import { MatCardModule } from '@angular/material/card';
 export class ApiKeyInputComponent {
   inputApiKey = '';
   @Output() apiKeySaved = new EventEmitter<string>();
+  @Output() apiKeyRemoved = new EventEmitter<void>();
 
   onSubmit() {
     this.apiKeySaved.emit(this.inputApiKey);
+  }
+
+  onRemove() {
+    this.apiKeyRemoved.emit();
   }
 } 

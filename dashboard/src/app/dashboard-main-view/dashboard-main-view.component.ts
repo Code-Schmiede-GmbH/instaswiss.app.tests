@@ -12,7 +12,10 @@ import { NgClass } from '@angular/common';
       <div class="frosted-glass-container">
         <div class="dashboard-header">
           <h1>Dashboard InstaSwiss</h1>
-          <div class="subtitle">API-Schlüssel gespeichert</div>
+          <div class="subtitle" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
+            API-Schlüssel gespeichert
+            <button class="remove-api-key-btn" mat-stroked-button color="warn" (click)="removeApiKey.emit()">Entfernen</button>
+          </div>
         </div>
         <div class="dashboard-content">
           <div class="dashboard-card">
@@ -37,4 +40,5 @@ import { NgClass } from '@angular/common';
 export class DashboardMainViewComponent {
   @Input() hikeCount: number | null = null;
   @Output() runTests = new EventEmitter<void>();
+  @Output() removeApiKey = new EventEmitter<void>();
 } 

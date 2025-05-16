@@ -1,9 +1,9 @@
 @if (!apiKey()) {
-  <app-api-key-input (apiKeySaved)="handleApiKeySaved($event)"></app-api-key-input>
+  <app-api-key-input (apiKeySaved)="handleApiKeySaved($event)" (apiKeyRemoved)="clearApiKey()"></app-api-key-input>
 } @else {
   <div class="background-image"></div>
   <div class="app-vertical-stack">
-    <app-dashboard-main-view [hikeCount]="hikeCount()" (runTests)="runTests()"></app-dashboard-main-view>
+    <app-dashboard-main-view [hikeCount]="hikeCount()" (runTests)="runTests()" (removeApiKey)="clearApiKey()"></app-dashboard-main-view>
     @if (testsStarted()) {
       <app-test-results-view [testResults]="testResults()" [testsLoading]="testsLoading()" (backToDashboard)="backToDashboard()"></app-test-results-view>
     }
