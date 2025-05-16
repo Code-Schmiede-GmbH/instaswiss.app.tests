@@ -1,11 +1,11 @@
 import { Injectable, signal } from '@angular/core';
-import { Step1HighlightsTest } from './tests/step1-highlights-test';
-import { Step0TypeFilterTest } from './tests/step0-type-filter-test';
-import { Step2TechnicalDifficultyTest } from './tests/step2-technical-difficulty-test';
-import { Step2ConditionalDifficultyTest } from './tests/step2-conditional-difficulty-test';
-import { Step2TechnicalConditionalIntersectionTest } from './tests/step2-technical-conditional-intersection-test';
-import { Step2EmptyArraySkipFilterTest } from './tests/step2-empty-array-skip-filter-test';
-import { Step2HikeDurationTest } from './tests/step2-hike-duration-test';
+import { Step1HighlightsTest } from './logic/step1-highlights-test';
+import { Step0TypeFilterTest } from './logic/step0-type-filter-test';
+import { Step2TechnicalDifficultyTest } from './logic/step2-technical-difficulty-test';
+import { Step2ConditionalDifficultyTest } from './logic/step2-conditional-difficulty-test';
+import { Step2TechnicalConditionalIntersectionTest } from './logic/step2-technical-conditional-intersection-test';
+import { Step2EmptyArraySkipFilterTest } from './logic/step2-empty-array-skip-filter-test';
+import { Step2HikeDurationTest } from './logic/step2-hike-duration-test';
 
 export interface TestResult {
   name: string;

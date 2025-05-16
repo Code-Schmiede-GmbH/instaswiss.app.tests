@@ -1,10 +1,9 @@
 import { Component, signal, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { checkAccomodationPhoneNumbers } from '../todos/phone-number-format-todo';
+import { checkAccomodationPhoneNumbers } from '../logic/phone-number-format-todo';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { TodoWorkComponent } from '../todo-work/todo-work.component';
 
 interface TodoResult {
   name: string;
@@ -21,7 +20,7 @@ interface TodoExecutor {
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, TodoWorkComponent],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss'],
   animations: [

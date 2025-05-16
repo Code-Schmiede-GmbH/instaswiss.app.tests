@@ -6,13 +6,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TestResultsService } from './test-results.service';
-import { fetchHikes, SUPABASE_URL } from './tests/test-utils';
+import { TestResultsService } from './tests/test-results.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ApiKeyInputComponent } from './api-key-input/api-key-input.component';
 import { DashboardMainViewComponent } from './dashboard-main-view/dashboard-main-view.component';
-import { TestResultsViewComponent } from './test-results-view/test-results-view.component';
-import { TodoWorkComponent } from './todo-work/todo-work.component';
+import { TestResultsViewComponent } from './tests/test-results-view/test-results-view.component';
+import { SUPABASE_URL } from './tests/logic/test-utils';
+import { fetchHikes } from './tests/logic/test-utils';
+import { TodoWorkComponent } from "./todos/todo-work/todo-work.component";
 
 @Component({
   selector: 'app-root',
@@ -27,8 +28,8 @@ import { TodoWorkComponent } from './todo-work/todo-work.component';
     ApiKeyInputComponent,
     DashboardMainViewComponent,
     TestResultsViewComponent,
-    TodoWorkComponent,
-  ],
+    TodoWorkComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations: [

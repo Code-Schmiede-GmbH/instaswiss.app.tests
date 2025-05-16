@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { BaseModalComponent } from '../base-modal/base-modal.component';
+import { BaseModalComponent } from "../../base-modal/base-modal.component";
 
 @Component({
   selector: 'app-todo-work',

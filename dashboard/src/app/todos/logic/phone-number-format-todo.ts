@@ -1,4 +1,4 @@
-import { getApiKey, fetchJson, SUPABASE_URL } from '../tests/test-utils';
+import { getApiKey, fetchJson, SUPABASE_URL } from '../../tests/logic/test-utils';
 
 export async function checkAccomodationPhoneNumbers() {
   const supabaseKey = getApiKey();

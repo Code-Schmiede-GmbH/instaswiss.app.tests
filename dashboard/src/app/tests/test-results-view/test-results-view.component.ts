@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BaseModalComponent } from '../base-modal/base-modal.component';
+import { BaseModalComponent } from '../../base-modal/base-modal.component';
 
 @Component({
   selector: 'app-test-results-view',

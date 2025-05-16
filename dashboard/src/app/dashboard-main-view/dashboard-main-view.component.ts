@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { TodoListComponent } from '../todo-list/todo-list.component';
-import { TodoWorkComponent } from '../todo-work/todo-work.component';
+import { TodoListComponent } from '../todos/todo-list/todo-list.component';
+import { TodoWorkComponent } from '../todos/todo-work/todo-work.component';
 
 @Component({
   selector: 'app-dashboard-main-view',
