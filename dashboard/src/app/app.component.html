@@ -1,86 +1,11 @@
 @if (!apiKey()) {
-  <mat-card class="login-card">
-    <mat-card-title>API-Schlüssel eingeben</mat-card-title>
-    <mat-card-content>
-      <form
-        (ngSubmit)="saveApiKey()"
-        #apiKeyForm="ngForm"
-        style="display: flex; flex-direction: column; gap: 16px"
-      >
-        <mat-form-field appearance="fill">
-          <mat-label>API-Schlüssel</mat-label>
-          <input
-            matInput
-            type="text"
-            name="apiKey"
-            [ngModel]="inputApiKey()"
-            (ngModelChange)="inputApiKey.set($event)"
-            required
-            autocomplete="off"
-          />
-        </mat-form-field>
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="!inputApiKey()"
-        >
-          Speichern
-        </button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+  <app-api-key-input (apiKeySaved)="handleApiKeySaved($event)"></app-api-key-input>
 } @else {
   <div class="background-image"></div>
   <div class="app-vertical-stack">
-    <div class="dashboard-main-container"
-         [@dashboardSlide]="testsStarted() ? 'hidden' : 'visible'">
-      <div class="frosted-glass-container">
-        <div class="dashboard-header">
-          <h1>Dashboard InstaSwiss</h1>
-          <div class="subtitle">API-Schlüssel gespeichert</div>
-        </div>
-        <div class="dashboard-content">
-          <div class="dashboard-card">
-            <div class="card-title">Anzahl Wanderungen</div>
-            <div class="hike-count">{{ hikeCount() === null ? 'Lädt...' : hikeCount() }}</div>
-          </div>
-          <div class="dashboard-card">
-            <div class="card-title">To-Dos</div>
-            <ul class="todo-list">
-              <li>Telefonnummer korrigieren</li>
-              <li>Öffnungszeiten-Format korrigieren</li>
-              <li>Webcam-Bild-URL korrigieren</li>
-            </ul>
-          </div>
-        </div>
-        <button class="run-tests-btn" (click)="runTests()">Tests ausführen</button>
-      </div>
-    </div>
+    <app-dashboard-main-view [hikeCount]="hikeCount()" (runTests)="runTests()"></app-dashboard-main-view>
     @if (testsStarted()) {
-      <div class="frosted-glass-container test-results-container"
-           [@testResultsFade]="(testsLoading() || testResults().length) ? 'visible' : 'hidden'">
-        <div class="test-results-header">
-          <button class="back-btn" (click)="backToDashboard()" aria-label="Zurück">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-          <h2 class="centered">Testergebnisse</h2>
-        </div>
-        <div class="test-results-list-wrapper">
-          <div class="test-results-list">
-            @if (testsLoading()) {
-              <div class="spinner"></div>
-            } @else {
-              @for (result of testResults(); track result.name) {
-                <div class="test-result-item" [ngClass]="{passed: result.passed, failed: !result.passed}">
-                  <div class="result-title">{{ result.name }}</div>
-                  <div class="result-message">{{ result.message }}</div>
-                </div>
-              }
-            }
-          </div>
-        </div>
-      </div>
+      <app-test-results-view [testResults]="testResults()" [testsLoading]="testsLoading()" (backToDashboard)="backToDashboard()"></app-test-results-view>
     }
   </div>
 }

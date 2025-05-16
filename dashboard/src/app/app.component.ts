@@ -12,6 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { TestResultsService } from './test-results.service';
 import { fetchHikes, SUPABASE_URL } from './tests/test-utils';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { ApiKeyInputComponent } from './api-key-input/api-key-input.component';
+import { DashboardMainViewComponent } from './dashboard-main-view/dashboard-main-view.component';
+import { TestResultsViewComponent } from './test-results-view/test-results-view.component';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +27,9 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     MatFormFieldModule,
     MatInputModule,
     NgClass,
+    ApiKeyInputComponent,
+    DashboardMainViewComponent,
+    TestResultsViewComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -65,9 +71,10 @@ export class AppComponent {
     this.fetchHikeCount();
   }
 
-  saveApiKey() {
-    this.apiKey.set(this.inputApiKey());
-    localStorage.setItem('apiKey', this.apiKey());
+  handleApiKeySaved(key: string) {
+    this.apiKey.set(key);
+    localStorage.setItem('apiKey', key);
+    this.inputApiKey.set(key);
     this.fetchHikeCount();
   }
 
