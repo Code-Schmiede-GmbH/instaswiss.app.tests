@@ -1,7 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { NgClass } from '@angular/common';
-// @ts-ignore
-import { createClient } from '@supabase/supabase-js';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +23,6 @@ import { TestResultsViewComponent } from './test-results-view/test-results-view.
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgClass,
     ApiKeyInputComponent,
     DashboardMainViewComponent,
     TestResultsViewComponent,

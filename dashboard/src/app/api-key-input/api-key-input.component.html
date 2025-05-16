@@ -1,0 +1,17 @@
+<mat-card class="login-card">
+  <mat-card-title>API-Schlüssel eingeben</mat-card-title>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()" #apiKeyForm="ngForm" style="display: flex; flex-direction: column; gap: 16px">
+      <mat-form-field appearance="fill">
+        <mat-label>API-Schlüssel</mat-label>
+        <input matInput type="text" name="apiKey" [(ngModel)]="inputApiKey" required autocomplete="off" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!inputApiKey">
+        Speichern
+      </button>
+    </form>
+    <button mat-stroked-button color="warn" style="margin-top: 16px; width: 100%;" (click)="onRemove()">
+      Entfernen
+    </button>
+  </mat-card-content>
+</mat-card> 

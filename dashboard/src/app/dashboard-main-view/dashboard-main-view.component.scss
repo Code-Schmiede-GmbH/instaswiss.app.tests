@@ -41,6 +41,13 @@
   text-align: center;
 }
 
+.subtitle-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
 .dashboard-content {
   display: flex;
   gap: 32px;
