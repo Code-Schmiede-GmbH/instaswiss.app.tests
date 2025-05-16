@@ -3,21 +3,24 @@
 } @else {
   <div class="background-image"></div>
   <div class="app-vertical-stack">
+    <!-- Dashboard always rendered, animation state controlled by dashboardAnimationState -->
     <div class="centered-abs">
       <app-dashboard-main-view
         [hikeCount]="hikeCount()"
         (runTests)="runTests()"
         (removeApiKey)="clearApiKey()"
         (workViewRequested)="showTodoWork()"
-        [@dashboardSlide]="testsStarted() ? 'hidden' : (showTodoWorkView() ? 'left' : 'visible')">
+        [@dashboardSlide]="dashboardAnimationState">
       </app-dashboard-main-view>
     </div>
+    <!-- Todo Work Modal -->
     @if (showTodoWorkViewModal()) {
       <div class="centered-abs">
         <app-todo-work (back)="hideTodoWork()" />
       </div>
     }
-    @if (showTestResultsView()) {
+    <!-- Test Results Modal -->
+    @if (showTestResultsModal()) {
       <div class="centered-abs">
         <app-test-results-view [testResults]="testResults()" [testsLoading]="testsLoading()" (backToDashboard)="backToDashboard()"></app-test-results-view>
       </div>

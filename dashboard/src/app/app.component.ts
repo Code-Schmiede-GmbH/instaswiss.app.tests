@@ -68,7 +68,7 @@ export class AppComponent {
   testResults = signal<any[]>([]);
   testsLoading = signal(false);
   testsStarted = signal(false);
-  showTestResultsView = signal(false);
+  showTestResultsModal = signal(false);
   showTodoWorkView = signal(false);
   showTodoWorkViewModal = signal(false);
 
@@ -77,6 +77,22 @@ export class AppComponent {
     this.apiKey.set(storedKey);
     this.inputApiKey.set(storedKey);
     this.fetchHikeCount();
+  }
+
+  get dashboardAnimationState() {
+    if (this.testsStarted()) return 'hidden';
+    if (this.showTodoWorkView()) return 'left';
+    return 'visible';
+  }
+
+  showModalWithDelay(showState: any, showModal: any, delay: number) {
+    showState.set(true);
+    setTimeout(() => showModal.set(true), delay);
+  }
+
+  hideModalWithDelay(showState: any, showModal: any, delay: number) {
+    showModal.set(false);
+    setTimeout(() => showState.set(false), delay);
   }
 
   handleApiKeySaved(key: string) {
@@ -109,25 +125,22 @@ export class AppComponent {
   async runTests() {
     this.testsStarted.set(true);
     this.testsLoading.set(true);
-    setTimeout(() => this.showTestResultsView.set(true), 600);
+    this.showModalWithDelay(this.testsStarted, this.showTestResultsModal, 600);
     const results = await this.testResultsService.runAllTests();
     this.testResults.set(results);
     this.testsLoading.set(false);
   }
 
   backToDashboard() {
-    this.testsStarted.set(false);
-    this.showTestResultsView.set(false);
+    this.hideModalWithDelay(this.testsStarted, this.showTestResultsModal, 400);
     this.testResults.set([]);
   }
 
   showTodoWork() {
-    this.showTodoWorkView.set(true);
-    setTimeout(() => this.showTodoWorkViewModal.set(true), 600);
+    this.showModalWithDelay(this.showTodoWorkView, this.showTodoWorkViewModal, 600);
   }
 
   hideTodoWork() {
-    this.showTodoWorkViewModal.set(false);
-    setTimeout(() => this.showTodoWorkView.set(false), 400);
+    this.hideModalWithDelay(this.showTodoWorkView, this.showTodoWorkViewModal, 400);
   }
 }
