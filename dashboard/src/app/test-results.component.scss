@@ -1,6 +1,8 @@
 mat-list-item {
   border-bottom: 1px solid var(--mat-sys-surface-container);
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
   padding: 16px 0;
 }
 
@@ -10,10 +12,12 @@ mat-list-item {
 
 .passed {
   color: #27ae60 !important;
+  background: #e8f5e9;
 }
 
 .failed {
   color: #e74c3c !important;
+  background: #ffebee;
 }
 
 .test-name {
@@ -23,4 +27,21 @@ mat-list-item {
 
 .test-message {
   color: #555;
+}
+
+.mdc-list-item.mdc-list-item--with-one-line {
+  height: 100%;
+}
+
+.result-message {
+  display: inline-block;
+  max-width: 40em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  background: #f8f8f8;
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  margin-left: 1em;
+  color: #888;
 }

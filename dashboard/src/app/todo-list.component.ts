@@ -15,7 +15,7 @@ interface Todo {
   selector: 'app-todo-list',
   imports: [MatListModule, MatButtonModule, MatExpansionModule],
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.scss']
+  styleUrls: ['./todo-list.component.scss'],
 })
 export class TodoListComponent {
   todos = signal<Todo[]>([
@@ -24,27 +24,29 @@ export class TodoListComponent {
       type: 'telephone',
       title: 'Correct Telephone Number',
       description: 'Check and correct the telephone number for hike #42.',
-      expanded: false
+      expanded: false,
     },
     {
       id: 2,
       type: 'opening_hours',
       title: 'Correct Opening Hours Format',
-      description: 'Ensure opening hours for hike #17 are in the correct format (e.g. Mo-Fr 09:00-18:00).',
-      expanded: false
+      description:
+        'Ensure opening hours for hike #17 are in the correct format (e.g. Mo-Fr 09:00-18:00).',
+      expanded: false,
     },
     {
       id: 3,
       type: 'webcam_url',
       title: 'Correct Webcam Image URL',
-      description: 'Update the webcam image URL for hike #99 to a valid image link.',
-      expanded: false
-    }
+      description:
+        'Update the webcam image URL for hike #99 to a valid image link.',
+      expanded: false,
+    },
   ]);
 
   toggleExpand(todo: Todo) {
-    this.todos.update(list =>
-      list.map(t => t.id === todo.id ? { ...t, expanded: !t.expanded } : t)
+    this.todos.update((list) =>
+      list.map((t) => (t.id === todo.id ? { ...t, expanded: !t.expanded } : t)),
     );
   }
 }

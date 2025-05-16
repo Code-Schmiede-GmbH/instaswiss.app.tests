@@ -1,0 +1,9 @@
+{
+  "angular.enable-strict-mode-prompt": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "git.rebaseWhenSync": true,
+  "git.autoStash": true,
+  "git.branchPrefix": "feature/",
+  "git.fetchOnPull": true
+}

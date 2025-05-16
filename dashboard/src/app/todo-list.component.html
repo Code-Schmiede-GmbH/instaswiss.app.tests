@@ -2,7 +2,11 @@
 
 <mat-accordion>
   @for (todo of todos(); track todo.id) {
-    <mat-expansion-panel [expanded]="todo.expanded" (opened)="toggleExpand(todo)" (closed)="toggleExpand(todo)">
+    <mat-expansion-panel
+      [expanded]="todo.expanded"
+      (opened)="toggleExpand(todo)"
+      (closed)="toggleExpand(todo)"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{ todo.title }}

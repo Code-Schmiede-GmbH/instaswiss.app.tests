@@ -7,26 +7,61 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { LoginComponent } from './login.component';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 const SUPABASE_URL = 'https://fiuchvggmjsegklpsgaq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdWNodmdnbWpzZWdrbHBzZ2FxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc0MTk3ODAsImV4cCI6MjAzMjk5NTc4MH0.92i8SOaqvzGz6Ao1bV_OF8O8RD9Hkj14MZOA64q3csQ';
 
 @Component({
   selector: 'app-root',
-  imports: [MatCardModule, MatListModule, MatButtonModule, MatExpansionModule, TodoListComponent, TestResultsComponent],
+  imports: [
+    MatCardModule,
+    MatListModule,
+    MatButtonModule,
+    MatExpansionModule,
+    TodoListComponent,
+    TestResultsComponent,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   hikeCount = signal<number | null>(null);
+  apiKey = signal<string>('');
+  inputApiKey = signal<string>('');
 
   constructor() {
+    const storedKey = localStorage.getItem('apiKey') || '';
+    this.apiKey.set(storedKey);
+    this.inputApiKey.set(storedKey);
     this.fetchHikeCount();
   }
 
+  saveApiKey() {
+    this.apiKey.set(this.inputApiKey());
+    localStorage.setItem('apiKey', this.apiKey());
+    this.fetchHikeCount();
+  }
+
+  clearApiKey() {
+    localStorage.removeItem('apiKey');
+    this.apiKey.set('');
+    this.inputApiKey.set('');
+    this.hikeCount.set(null);
+  }
+
   async fetchHikeCount() {
+    if (!this.apiKey()) {
+      this.hikeCount.set(null);
+      return;
+    }
     try {
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const supabase = createClient(SUPABASE_URL, this.apiKey());
       const { data, error } = await supabase.from('hikes').select('id');
       if (error) throw error;
       this.hikeCount.set(Array.isArray(data) ? data.length : 0);

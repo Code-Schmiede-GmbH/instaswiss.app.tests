@@ -27,17 +27,24 @@ body {
   padding: 0;
 }
 
-h1, h2, h3, .mat-card-title, mat-card-title {
+h1,
+h2,
+h3,
+.mat-card-title,
+mat-card-title {
   color: #222 !important;
   font-weight: 700;
 }
 
-h4, h5, h6 {
+h4,
+h5,
+h6 {
   color: #333;
   font-weight: 600;
 }
 
-.accent, .mat-accent {
+.accent,
+.mat-accent {
   color: #0099cc !important;
   font-weight: 600;
 }

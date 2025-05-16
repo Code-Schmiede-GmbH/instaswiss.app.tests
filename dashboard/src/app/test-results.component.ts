@@ -1,26 +1,24 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
+import { TestResultsService, TestResult } from './test-results.service';
 import { MatListModule } from '@angular/material/list';
 import { NgClass } from '@angular/common';
-
-interface TestResult {
-  name: string;
-  passed: boolean;
-  message?: string;
-}
 
 @Component({
   selector: 'app-test-results',
   imports: [MatListModule, NgClass],
   templateUrl: './test-results.component.html',
-  styleUrls: ['./test-results.component.scss']
+  styleUrls: ['./test-results.component.scss'],
+  standalone: true,
 })
-export class TestResultsComponent {
-  testResults = signal<TestResult[]>([
-    { name: 'Filter by difficulty', passed: true },
-    { name: 'Filter by min/max length', passed: false, message: 'Returned hikes outside range' },
-    { name: 'Filter by elevation gain', passed: true },
-    { name: 'Multiple filter params', passed: true },
-    { name: 'Invalid query params', passed: true },
-    { name: 'Unauthorized access', passed: false, message: 'Did not return 401' }
-  ]);
+export class TestResultsComponent implements OnInit {
+  testResults = signal<TestResult[]>([]);
+  loading = signal(true);
+
+  constructor(private testService: TestResultsService) {}
+
+  async ngOnInit() {
+    this.loading.set(true);
+    this.testResults.set(await this.testService.runAllTests());
+    this.loading.set(false);
+  }
 }

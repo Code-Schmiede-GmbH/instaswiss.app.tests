@@ -1,25 +1,73 @@
-<div class="dashboard-container" style="display: flex; flex-direction: column; gap: 24px;">
-  <mat-card>
-    <mat-card-title>Dashboard InstaSwiss</mat-card-title>
+@if (!apiKey()) {
+  <mat-card class="login-card">
+    <mat-card-title>Enter API Key</mat-card-title>
+    <mat-card-content>
+      <form
+        (ngSubmit)="saveApiKey()"
+        #apiKeyForm="ngForm"
+        style="display: flex; flex-direction: column; gap: 16px"
+      >
+        <mat-form-field appearance="fill">
+          <mat-label>API Key</mat-label>
+          <input
+            matInput
+            type="text"
+            name="apiKey"
+            [ngModel]="inputApiKey()"
+            (ngModelChange)="inputApiKey.set($event)"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!inputApiKey()"
+        >
+          Save
+        </button>
+      </form>
+    </mat-card-content>
   </mat-card>
-  <div class="dashboard-sections" style="display: flex; flex-wrap: wrap; gap: 24px;">
-    <mat-card style="flex: 1 1 300px; min-width: 300px;">
-      <mat-card-title>Number of Hikes</mat-card-title>
-      <mat-card-content>
-        <div id="hike-count" style="font-size: 2rem;">{{ hikeCount() === null ? 'Loading...' : hikeCount() }}</div>
-      </mat-card-content>
+} @else {
+  <div
+    class="dashboard-container"
+    style="display: flex; flex-direction: column; gap: 24px"
+  >
+    <mat-card
+      style="display: flex; align-items: center; justify-content: space-between"
+    >
+      <mat-card-title>Dashboard InstaSwiss</mat-card-title>
+      <div style="display: flex; align-items: center; gap: 16px">
+        <span>API Key saved</span>
+        <button mat-button (click)="clearApiKey()">Clear API Key</button>
+      </div>
     </mat-card>
-    <mat-card style="flex: 2 1 400px; min-width: 350px;">
-      <mat-card-title>Todos</mat-card-title>
-      <mat-card-content>
-        <app-todo-list></app-todo-list>
-      </mat-card-content>
-    </mat-card>
-    <mat-card style="flex: 2 1 400px; min-width: 350px;">
-      <mat-card-title>Test Results</mat-card-title>
-      <mat-card-content>
-        <app-test-results></app-test-results>
-      </mat-card-content>
-    </mat-card>
+    <div
+      class="dashboard-sections"
+      style="display: flex; flex-wrap: wrap; gap: 24px"
+    >
+      <mat-card style="flex: 1 1 300px; min-width: 300px">
+        <mat-card-title>Number of Hikes</mat-card-title>
+        <mat-card-content>
+          <div id="hike-count" style="font-size: 2rem">
+            {{ hikeCount() === null ? 'Loading...' : hikeCount() }}
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card style="flex: 2 1 400px; min-width: 350px">
+        <mat-card-title>Todos</mat-card-title>
+        <mat-card-content>
+          <app-todo-list></app-todo-list>
+        </mat-card-content>
+      </mat-card>
+      <mat-card style="flex: 2 1 400px; min-width: 350px">
+        <mat-card-title>Test Results</mat-card-title>
+        <mat-card-content>
+          <app-test-results></app-test-results>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
-</div>
+}
