@@ -1,0 +1,16 @@
+<div class="todo-list-wrapper">
+  <ul class="todo-list">
+    @if (loading()) {
+      <li>Lädt To-Dos...</li>
+    }
+    @for (todo of todos(); track todo.name) {
+      <li [ngClass]="{ 'todo-error': todo.error, 'todo-success': todo.result && !todo.error }">
+        <span>{{ todo.name }}</span>
+      </li>
+    }
+  </ul>
+  <button mat-flat-button color="primary" (click)="workOnTodos()" [disabled]="loading()">
+    Bearbeiten
+    <mat-icon iconPositionEnd>chevron_right</mat-icon>
+  </button>
+</div>

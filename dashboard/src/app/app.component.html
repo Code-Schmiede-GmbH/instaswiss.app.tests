@@ -3,9 +3,24 @@
 } @else {
   <div class="background-image"></div>
   <div class="app-vertical-stack">
-    <app-dashboard-main-view [hikeCount]="hikeCount()" (runTests)="runTests()" (removeApiKey)="clearApiKey()"></app-dashboard-main-view>
-    @if (testsStarted()) {
-      <app-test-results-view [testResults]="testResults()" [testsLoading]="testsLoading()" (backToDashboard)="backToDashboard()"></app-test-results-view>
+    <div class="centered-abs">
+      <app-dashboard-main-view
+        [hikeCount]="hikeCount()"
+        (runTests)="runTests()"
+        (removeApiKey)="clearApiKey()"
+        (workViewRequested)="showTodoWork()"
+        [@dashboardSlide]="testsStarted() ? 'hidden' : (showTodoWorkView() ? 'left' : 'visible')">
+      </app-dashboard-main-view>
+    </div>
+    @if (showTodoWorkViewModal()) {
+      <div class="centered-abs">
+        <app-todo-work (back)="hideTodoWork()" />
+      </div>
+    }
+    @if (showTestResultsView()) {
+      <div class="centered-abs">
+        <app-test-results-view [testResults]="testResults()" [testsLoading]="testsLoading()" (backToDashboard)="backToDashboard()"></app-test-results-view>
+      </div>
     }
   </div>
 }

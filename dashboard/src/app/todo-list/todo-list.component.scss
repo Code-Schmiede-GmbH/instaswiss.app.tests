@@ -1,0 +1,36 @@
+.todo-list {
+  list-style: disc inside;
+  font-size: 1.1rem;
+  color: #222;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.todo-error {
+  color: #e74c3c;
+}
+
+.todo-success {
+  color: #27ae60;
+}
+
+.todo-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.todo-list {
+  flex: 1 1 auto;
+}
+
+button {
+  align-self: flex-end;
+  margin-top: 2rem;
+
+  mat-icon {
+    margin-left: 0.5rem;
+  }
+}

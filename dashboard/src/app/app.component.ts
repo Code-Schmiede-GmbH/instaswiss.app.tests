@@ -12,6 +12,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { ApiKeyInputComponent } from './api-key-input/api-key-input.component';
 import { DashboardMainViewComponent } from './dashboard-main-view/dashboard-main-view.component';
 import { TestResultsViewComponent } from './test-results-view/test-results-view.component';
+import { TodoWorkComponent } from './todo-work/todo-work.component';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ import { TestResultsViewComponent } from './test-results-view/test-results-view.
     ApiKeyInputComponent,
     DashboardMainViewComponent,
     TestResultsViewComponent,
+    TodoWorkComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -33,10 +35,17 @@ import { TestResultsViewComponent } from './test-results-view/test-results-view.
     trigger('dashboardSlide', [
       state('visible', style({ transform: 'translateY(0)', opacity: 1 })),
       state('hidden', style({ transform: 'translateY(-120%)', opacity: 0 })),
+      state('left', style({ transform: 'translateX(-120%)', opacity: 0 })),
       transition('visible => hidden', [
         animate('600ms cubic-bezier(0.77,0,0.175,1)')
       ]),
       transition('hidden => visible', [
+        animate('400ms cubic-bezier(0.77,0,0.175,1)')
+      ]),
+      transition('visible => left', [
+        animate('600ms cubic-bezier(0.77,0,0.175,1)')
+      ]),
+      transition('left => visible', [
         animate('400ms cubic-bezier(0.77,0,0.175,1)')
       ]),
     ]),
@@ -59,6 +68,9 @@ export class AppComponent {
   testResults = signal<any[]>([]);
   testsLoading = signal(false);
   testsStarted = signal(false);
+  showTestResultsView = signal(false);
+  showTodoWorkView = signal(false);
+  showTodoWorkViewModal = signal(false);
 
   constructor(private testResultsService: TestResultsService) {
     const storedKey = localStorage.getItem('apiKey') || '';
@@ -97,6 +109,7 @@ export class AppComponent {
   async runTests() {
     this.testsStarted.set(true);
     this.testsLoading.set(true);
+    setTimeout(() => this.showTestResultsView.set(true), 600);
     const results = await this.testResultsService.runAllTests();
     this.testResults.set(results);
     this.testsLoading.set(false);
@@ -104,6 +117,17 @@ export class AppComponent {
 
   backToDashboard() {
     this.testsStarted.set(false);
+    this.showTestResultsView.set(false);
     this.testResults.set([]);
+  }
+
+  showTodoWork() {
+    this.showTodoWorkView.set(true);
+    setTimeout(() => this.showTodoWorkViewModal.set(true), 600);
+  }
+
+  hideTodoWork() {
+    this.showTodoWorkViewModal.set(false);
+    setTimeout(() => this.showTodoWorkView.set(false), 400);
   }
 }

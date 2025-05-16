@@ -13,12 +13,23 @@
         <div class="hike-count">{{ hikeCount === null ? 'Lädt...' : hikeCount }}</div>
       </div>
       <div class="dashboard-card">
-        <div class="card-title">To-Dos</div>
-        <ul class="todo-list">
-          <li>Telefonnummer korrigieren</li>
-          <li>Öffnungszeiten-Format korrigieren</li>
-          <li>Webcam-Bild-URL korrigieren</li>
-        </ul>
+        <div class="card-title">Todos</div>
+        @if (!showWorkView) {
+          <app-todo-list (workViewRequested)="onWorkViewRequested()" @flyInOut></app-todo-list>
+        }
+        @else {
+          <div class="frosted-glass-container test-results-container">
+            <div class="test-results-header">
+              <button class="back-btn" (click)="onWorkViewBack()" aria-label="Zurück">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <h2 class="centered">Todos bearbeiten</h2>
+            </div>
+            <div class="test-results-list-wrapper">
+              <app-todo-work @flyInOut></app-todo-work>
+            </div>
+          </div>
+        }
       </div>
     </div>
     <button class="run-tests-btn" (click)="runTests.emit()">Tests ausführen</button>

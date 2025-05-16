@@ -49,8 +49,11 @@ mat-card-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
+}
+
+.app-vertical-stack.center-children {
+  justify-content: center;
 }
 
 body {
@@ -324,4 +327,16 @@ body {
 .back-btn:hover {
   background: #e0e6ed;
   color: #0099cc;
+}
+
+.centered-abs {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

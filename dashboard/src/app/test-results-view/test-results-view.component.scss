@@ -1,6 +1,5 @@
 .test-results-container {
   margin: 0 auto;
-  margin-top: 24px;
   position: static;
 }
 
@@ -113,11 +112,11 @@
   z-index: 100;
   position: fixed;
   left: 50%;
-  top: 48px;
-  transform: translateX(-50%) !important;
+  top: 50%;
+  transform: translate(-50%, -50%) !important;
   min-width: 420px;
   max-width: 90vw;
-  max-height: calc(100vh - 48px);
+  max-height: 90vh;
   overflow-y: auto;
   pointer-events: auto;
   box-shadow: 0 12px 32px 0 rgba(31,38,135,0.25);
