@@ -1,18 +1,15 @@
 import { TestResult } from '../test-results.service';
+import { getApiKey, fetchJson, fetchHikes, mapHikeIdToName } from './test-utils';
 
-export class Step0HighlightsTest {
+export class Step1HighlightsTest {
   apiUrl = 'https://fiuchvggmjsegklpsgaq.supabase.co/functions/v1/filter-hikes';
-
-  private getApiKey(): string {
-    return localStorage.getItem('apiKey') || '';
-  }
 
   async run(): Promise<TestResult> {
     const supabaseUrl = 'https://fiuchvggmjsegklpsgaq.supabase.co';
-    const supabaseKey = this.getApiKey();
+    const supabaseKey = getApiKey();
 
     // 1. Get all highlights
-    const highlightsRes = await fetch(
+    const { data: highlights } = await fetchJson(
       `${supabaseUrl}/rest/v1/highlights?select=id,name_de`,
       {
         headers: {
@@ -21,10 +18,9 @@ export class Step0HighlightsTest {
         },
       },
     );
-    const highlights = await highlightsRes.json();
 
     // 2. Get all hikes_highlights
-    const hikesHighlightsRes = await fetch(
+    const { data: hikesHighlights } = await fetchJson(
       `${supabaseUrl}/rest/v1/hikes_highlights?select=hikes_id,highlights_id`,
       {
         headers: {
@@ -33,22 +29,10 @@ export class Step0HighlightsTest {
         },
       },
     );
-    const hikesHighlights = await hikesHighlightsRes.json();
 
     // 3. Get all published hikes
-    const hikesRes = await fetch(
-      `${supabaseUrl}/rest/v1/hikes?select=id,name_de,state&state=eq.1`,
-      {
-        headers: {
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-        },
-      },
-    );
-    const hikes = await hikesRes.json();
-    // Map: id -> name_de for published hikes
-    const publishedHikeIdToName: Record<string, string> = {};
-    for (const h of hikes) publishedHikeIdToName[h.id] = h.name_de;
+    const hikes = await fetchHikes(supabaseUrl, supabaseKey);
+    const publishedHikeIdToName = mapHikeIdToName(hikes);
     const publishedHikeIds = new Set(hikes.map((h: any) => h.id));
 
     // 4. For each highlight, find published hikes with that highlight
@@ -72,7 +56,7 @@ export class Step0HighlightsTest {
 
       // 5. Call the filter API
       const payload = {
-        json_data: { step0: { selectedType: [highlight.id] } },
+        json_data: { step1: { selectedType: [highlight.id] } },
       };
       const res = await fetch(this.apiUrl, {
         method: 'POST',
@@ -116,16 +100,16 @@ export class Step0HighlightsTest {
     }
     if (checked === 0) {
       return {
-        name: 'Filter by selectedType',
+        name: 'Filter by Highlights',
         passed: false,
         message: 'No published hikes found with any highlight',
       };
     }
     const passed = missing.length === 0;
     return {
-      name: 'Filter by selectedType',
+      name: 'Filter by Highlights',
       passed,
-      message: `Correct: ${correct.join(', ') || 'none'} | Missing: ${missing.join(', ') || 'none'}\nDetails: ${details.join('\n')}`,
+      message: `Correct: ${correct.join(', ') || 'none'} | Wrong: ${missing.join(', ') || 'none'}\nDetails:\n${details.join('\n')}`,
     };
   }
 }

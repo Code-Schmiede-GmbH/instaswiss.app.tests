@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 // @ts-ignore
 import { createClient } from '@supabase/supabase-js';
 import { TodoListComponent } from './todo-list.component';
@@ -11,6 +12,7 @@ import { LoginComponent } from './login.component';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TestResultsService } from './test-results.service';
 
 const SUPABASE_URL = 'https://fiuchvggmjsegklpsgaq.supabase.co';
 
@@ -26,6 +28,7 @@ const SUPABASE_URL = 'https://fiuchvggmjsegklpsgaq.supabase.co';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    NgClass,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -34,8 +37,10 @@ export class AppComponent {
   hikeCount = signal<number | null>(null);
   apiKey = signal<string>('');
   inputApiKey = signal<string>('');
+  testResults = signal<any[]>([]);
+  testsLoading = signal(false);
 
-  constructor() {
+  constructor(private testResultsService: TestResultsService) {
     const storedKey = localStorage.getItem('apiKey') || '';
     this.apiKey.set(storedKey);
     this.inputApiKey.set(storedKey);
@@ -68,5 +73,12 @@ export class AppComponent {
     } catch (e) {
       this.hikeCount.set(0);
     }
+  }
+
+  async runTests() {
+    this.testsLoading.set(true);
+    const results = await this.testResultsService.runAllTests();
+    this.testResults.set(results);
+    this.testsLoading.set(false);
   }
 }

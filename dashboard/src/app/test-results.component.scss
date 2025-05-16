@@ -45,3 +45,31 @@ mat-list-item {
   margin-left: 1em;
   color: #888;
 }
+
+.result-item-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.result-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.result-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  margin-left: 1em;
+}
+
+.result-symbol {
+  font-size: 1.2em;
+}

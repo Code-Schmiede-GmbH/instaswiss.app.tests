@@ -31,43 +31,49 @@
     </mat-card-content>
   </mat-card>
 } @else {
-  <div
-    class="dashboard-container"
-    style="display: flex; flex-direction: column; gap: 24px"
-  >
-    <mat-card
-      style="display: flex; align-items: center; justify-content: space-between"
-    >
-      <mat-card-title>Dashboard InstaSwiss</mat-card-title>
-      <div style="display: flex; align-items: center; gap: 16px">
-        <span>API Key saved</span>
-        <button mat-button (click)="clearApiKey()">Clear API Key</button>
-      </div>
-    </mat-card>
-    <div
-      class="dashboard-sections"
-      style="display: flex; flex-wrap: wrap; gap: 24px"
-    >
-      <mat-card style="flex: 1 1 300px; min-width: 300px">
-        <mat-card-title>Number of Hikes</mat-card-title>
-        <mat-card-content>
-          <div id="hike-count" style="font-size: 2rem">
-            {{ hikeCount() === null ? 'Loading...' : hikeCount() }}
+  <div class="background-image"></div>
+  <div class="app-vertical-stack">
+    <div class="dashboard-main-container">
+      <div class="frosted-glass-container">
+        <div class="dashboard-header">
+          <h1>Dashboard InstaSwiss</h1>
+          <div class="subtitle">API Key saved</div>
+        </div>
+        <div class="dashboard-content">
+          <div class="dashboard-card">
+            <div class="card-title">Number of Hikes</div>
+            <div class="hike-count">{{ hikeCount() === null ? 'Loading...' : hikeCount() }}</div>
           </div>
-        </mat-card-content>
-      </mat-card>
-      <mat-card style="flex: 2 1 400px; min-width: 350px">
-        <mat-card-title>Todos</mat-card-title>
-        <mat-card-content>
-          <app-todo-list></app-todo-list>
-        </mat-card-content>
-      </mat-card>
-      <mat-card style="flex: 2 1 400px; min-width: 350px">
-        <mat-card-title>Test Results</mat-card-title>
-        <mat-card-content>
-          <app-test-results></app-test-results>
-        </mat-card-content>
-      </mat-card>
+          <div class="dashboard-card">
+            <div class="card-title">To-Dos</div>
+            <ul class="todo-list">
+              <li>Correct Telephone Number</li>
+              <li>Correct Opening Hours Format</li>
+              <li>Correct Webcam Image URL</li>
+            </ul>
+          </div>
+        </div>
+        <button class="run-tests-btn" (click)="runTests()">Run Tests</button>
+      </div>
     </div>
+    @if (testsLoading() || testResults()?.length) {
+      <div class="frosted-glass-container test-results-container">
+        <div class="dashboard-header">
+          <h2>Test Results</h2>
+        </div>
+        <div class="test-results-list">
+          @if (testsLoading()) {
+            <div class="spinner"></div>
+          } @else {
+            @for (result of testResults(); track result.name) {
+              <div class="test-result-item" [ngClass]="{passed: result.passed, failed: !result.passed}">
+                <div class="result-title">{{ result.name }}</div>
+                <div class="result-message">{{ result.message }}</div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
   </div>
 }

@@ -1,22 +1,31 @@
 @if (loading()) {
   <div>Running tests...</div>
 }
+<button mat-raised-button color="primary" (click)="runTests()" [disabled]="loading()" style="margin-bottom: 1em;">
+  Run Tests
+</button>
 @if (!loading()) {
   <mat-list>
     @for (result of testResults(); track result.name) {
       <mat-list-item
         [ngClass]="{ passed: result.passed, failed: !result.passed }"
       >
-        <span>{{ result.name }}</span>
-        @if (result.passed) {
-          <span style="color: green">✔</span>
-        }
-        @if (!result.passed) {
-          <span style="color: red">✘</span>
-        }
-        @if (result.message) {
-          <span class="result-message">{{ result.message }}</span>
-        }
+        <div class="result-item-content">
+          <div class="result-header">
+            <span class="result-name">{{ result.name }}</span>
+            @if (result.passed) {
+              <span class="result-symbol" style="color: green">✔</span>
+            }
+            @if (!result.passed) {
+              <span class="result-symbol" style="color: red">✘</span>
+            }
+          </div>
+          <div class="result-details">
+            @if (result.message) {
+              <span class="result-message">{{ result.message }}</span>
+            }
+          </div>
+        </div>
       </mat-list-item>
     }
   </mat-list>
