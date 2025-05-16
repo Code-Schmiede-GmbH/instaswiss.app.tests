@@ -1,6 +1,15 @@
 <app-base-modal [title]="title" (back)="back.emit()">
   <div class="todo-work-container">
-    <p>Here you can work on your todos.</p>
-    <!-- Add more content here as needed -->
+    <ng-container *ngIf="loading; else todoList">
+      <p>Lädt To-Dos...</p>
+    </ng-container>
+    <ng-template #todoList>
+      <ng-container *ngIf="todos && todos.length; else noTodos">
+        <app-expandable-todo-item *ngFor="let todo of todos" [todo]="todo"></app-expandable-todo-item>
+      </ng-container>
+      <ng-template #noTodos>
+        <p>Keine To-Dos gefunden.</p>
+      </ng-template>
+    </ng-template>
   </div>
 </app-base-modal> 

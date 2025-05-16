@@ -1,20 +1,16 @@
 import { Component, signal, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { checkAccomodationPhoneNumbers } from '../logic/phone-number-format-todo';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { WebcamUrlImageTodoGenerator } from '../logic/webcam-url-image-todo';
+import { PhoneNumberFormatTodoGenerator } from '../logic/phone-number-format-todo';
 
 interface TodoResult {
   name: string;
   loading: boolean;
   result?: string;
   error?: string;
-}
-
-interface TodoExecutor {
-  name: string;
-  execute: () => Promise<any>;
 }
 
 @Component({
@@ -46,21 +42,17 @@ export class TodoListComponent {
   }
 
   async loadTodos() {
-    const todos: TodoExecutor[] = [
-      {
-        name: 'Telefonnummer korrigieren',
-        execute: async () => {
-          return checkAccomodationPhoneNumbers();
-        }
-      },
-      // Add more todos here
+    const todoGenerators = [
+      new PhoneNumberFormatTodoGenerator(),
+      new WebcamUrlImageTodoGenerator(),
+      // Add more generators here
     ];
-    const results: TodoResult[] = todos.map(t => ({ name: t.name, loading: true }));
+    const results: TodoResult[] = todoGenerators.map(g => ({ name: g.name, loading: true }));
     this.todos.set(results);
     this.loading.set(true);
-    for (let i = 0; i < todos.length; ++i) {
+    for (let i = 0; i < todoGenerators.length; ++i) {
       try {
-        const res = await todos[i].execute();
+        const res = await todoGenerators[i].getTodos();
         const newResults = [...this.todos()];
         if (Array.isArray(res) && res.length === 0) {
           newResults[i] = { ...newResults[i], loading: false, result: 'Keine Fehler' };

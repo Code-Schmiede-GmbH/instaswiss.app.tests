@@ -1,0 +1,61 @@
+import { fetchJson, SUPABASE_URL } from '../../tests/logic/test-utils';
+import { getApiKey } from '../../tests/logic/test-utils';
+import type { TodoItem } from './todo-item';
+import { TodoGenerator } from './todo-generator';
+
+export class WebcamUrlImageTodoGenerator implements TodoGenerator {
+  public readonly name = 'Webcam-URL auf Bild prüfen';
+  async getTodos(): Promise<TodoItem[]> {
+    const supabaseKey = getApiKey();
+    const { data: hikes } = await fetchJson(
+      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,webcam_url`,
+      {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+      },
+    );
+    if (!Array.isArray(hikes)) throw new Error('Could not fetch hikes');
+    const wrong: TodoItem[] = [];
+    for (const h of hikes) {
+      if (!h.webcam_url || typeof h.webcam_url !== 'string') continue;
+      const url = h.webcam_url.trim();
+      if (!url) continue;
+      const valid = this.isImageUrl(url);
+      if (!valid) {
+        wrong.push({
+          id: String(h.id),
+          name: h.name_de,
+          type: 'hike',
+          wrongValue: h.webcam_url,
+          correctValue: '',
+          generator: this,
+        });
+      }
+    }
+    return wrong;
+  }
+
+  async fixTodo(id: string, correctValue: string): Promise<void> {
+    const supabaseKey = getApiKey();
+    const url = `${SUPABASE_URL}/rest/v1/hikes?id=eq.${encodeURIComponent(id)}`;
+    const { res, data } = await fetchJson(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+      body: JSON.stringify({ webcam_url: correctValue }),
+    });
+    if (!res.ok) {
+      throw new Error(data?.message || 'Failed to update webcam_url');
+    }
+  }
+
+  private isImageUrl(url: string): boolean {
+    // Accept common image extensions
+    return /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(url.split('?')[0]);
+  }
+} 

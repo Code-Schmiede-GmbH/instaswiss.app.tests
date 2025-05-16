@@ -1,0 +1,43 @@
+<div class="todo-header" (click)="toggleExpand()" [style.cursor]="todo.items?.length ? 'pointer' : 'default'" style="display: flex; align-items: center;">
+  <span style="flex: 1;">{{ todo.name }}</span>
+  @if (!todo.items || !todo.items.length) {
+    <mat-icon color="primary">check_circle</mat-icon>
+  }
+  @if (todo.items && todo.items.length) {
+    <mat-icon>{{ expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+  }
+</div>
+@if (todo.items && todo.items.length && expanded) {
+  <div class="todo-items-list" style="margin-left: 2rem;">
+    <table>
+      <thead>
+        <tr>
+          <th class="left-align">Name</th>
+          <th class="left-align">Wert korrigieren</th>
+          <th class="left-align"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of todo.items; track item.name) {
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>
+              <input 
+                #inputRef
+                style="border: none; border-bottom: 1px solid #c4c4c4; outline: none; padding: 8px 0; font: inherit; background: transparent; width: 100%; transition: border-color 0.2s;"
+                [value]="item.wrongValue" 
+                (focus)="setInputActive(inputRef, true)"
+                (blur)="setInputActive(inputRef, false)"
+                (change)="updateCorrectValue(item, $event)" 
+                placeholder="Korrigierten Wert eingeben" 
+              />
+            </td>
+            <td>
+              <button mat-flat-button color="primary" (click)="saveFix(item)">Speichern</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+} 

@@ -1,0 +1,59 @@
+.todo-header {
+  font-weight: 500;
+  padding: 0.5rem 0;
+}
+
+.todo-items-list {
+  margin-top: 0.25rem;
+}
+
+.todo-subitem-row {
+  padding: 0.25rem 0;
+}
+
+.left-align {
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+}
+th.left-align {
+  text-align: left;
+  vertical-align: middle;
+}
+td {
+  vertical-align: middle;
+}
+td input {
+  min-width: 500px !important;
+}
+
+// Vertically center the text inside the Material input
+::ng-deep .mat-form-field-infix input.mat-input-element {
+  vertical-align: middle;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  display: flex;
+  align-items: center;
+}
+
+// Force Material input to align text with table row
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: 0 !important;
+  line-height: 1.5 !important;
+  display: flex;
+  align-items: center;
+}
+::ng-deep .mat-input-element {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  height: 1.5em !important;
+  line-height: 1.5 !important;
+  font-size: 1rem !important;
+  display: flex;
+  align-items: center;
+} 
