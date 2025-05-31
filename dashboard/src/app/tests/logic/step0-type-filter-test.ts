@@ -22,7 +22,6 @@ export class Step0TypeFilterTest {
     // 2. Get all published hikes
     const hikes = await fetchHikes(supabaseUrl, supabaseKey);
     const publishedHikeIdToName = mapHikeIdToName(hikes);
-    const publishedHikeIds = new Set(hikes.map((h: any) => h.id));
 
     // 3. For each type, find published hikes with that type
     let correct: string[] = [];
@@ -32,7 +31,7 @@ export class Step0TypeFilterTest {
     for (const type of types) {
       const hikeIdsForType = hikes
         .filter(
-          (h: any) => h.hike_type_id === type.id && h.state === 1
+          (h: any) => h.hike_type_id === type.id
         )
         .map((h: any) => h.id);
       if (hikeIdsForType.length === 0) continue;

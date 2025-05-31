@@ -22,18 +22,22 @@
           <tr>
             <td>{{ item.name }}</td>
             <td>
-              <input 
-                #inputRef
-                style="border: none; border-bottom: 1px solid #c4c4c4; outline: none; padding: 8px 0; font: inherit; background: transparent; width: 100%; transition: border-color 0.2s;"
-                [value]="item.wrongValue" 
-                (focus)="setInputActive(inputRef, true)"
-                (blur)="setInputActive(inputRef, false)"
-                (change)="updateCorrectValue(item, $event)" 
-                placeholder="Korrigierten Wert eingeben" 
-              />
+                @if (item.canBeCorrected) {
+                <input 
+                  #inputRef
+                  style="border: none; border-bottom: 1px solid #c4c4c4; outline: none; padding: 8px 0; font: inherit; background: transparent; width: 100%; transition: border-color 0.2s;"
+                  [value]="item.wrongValue" 
+                  (focus)="setInputActive(inputRef, true)"
+                  (blur)="setInputActive(inputRef, false)"
+                  (change)="updateCorrectValue(item, $event)" 
+                  placeholder="Korrigierten Wert eingeben" 
+                />
+                } @else {
+                  <span style="color: red;">{{ item.reason }}</span>
+                }
             </td>
             <td>
-              <button mat-flat-button color="primary" (click)="saveFix(item)">Speichern</button>
+              <button mat-flat-button color="primary" [disabled]="!item.canBeCorrected" (click)="saveFix(item)">{{ item.actionText }}</button>
             </td>
           </tr>
         }

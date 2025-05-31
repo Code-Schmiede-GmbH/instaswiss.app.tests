@@ -5,6 +5,7 @@ import { TodoGenerator } from './todo-generator';
 
 export class WebcamUrlImageTodoGenerator implements TodoGenerator {
   public readonly name = 'Webcam-URL auf Bild prüfen';
+  
   async getTodos(): Promise<TodoItem[]> {
     const supabaseKey = getApiKey();
     const { data: hikes } = await fetchJson(
@@ -30,7 +31,10 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
           type: 'hike',
           wrongValue: h.webcam_url,
           correctValue: '',
+          canBeCorrected: true,
+          reason: '',
           generator: this,
+          actionText: 'Verbessern',
         });
       }
     }

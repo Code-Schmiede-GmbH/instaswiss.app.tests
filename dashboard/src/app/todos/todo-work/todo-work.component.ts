@@ -7,6 +7,7 @@ import { TodoItem } from '../logic/todo-item';
 import { ExpandableTodoItemComponent } from './expandable-todo-item/expandable-todo-item.component';
 import { PhoneNumberFormatTodoGenerator } from '../logic/phone-number-format-todo';
 import { WebcamUrlImageTodoGenerator } from '../logic/webcam-url-image-todo';
+import { SvgMapTodo } from '../logic/svgmap-todo';
 
 @Component({
   selector: 'app-todo-work',
@@ -26,11 +27,13 @@ export class TodoWorkComponent implements OnInit {
     const todoGenerators = [
       new PhoneNumberFormatTodoGenerator(),
       new WebcamUrlImageTodoGenerator(),
+      new SvgMapTodo(),
     ];
     const results: { name: string; items?: TodoItem[] }[] = [];
     for (const generator of todoGenerators) {
       try {
         const res = await generator.getTodos();
+
         if (Array.isArray(res) && res.length === 0) {
           results.push({ name: generator.name });
         } else if (Array.isArray(res)) {
@@ -41,6 +44,9 @@ export class TodoWorkComponent implements OnInit {
             type: n.type,
             correctValue: n.correctValue,
             generator: generator,
+            canBeCorrected: n.canBeCorrected,
+            reason: n.reason,
+            actionText: n.actionText,
           })) });
         } else {
           results.push({ name: generator.name, items: [{
@@ -50,6 +56,9 @@ export class TodoWorkComponent implements OnInit {
             type: '',
             correctValue: '',
             generator: generator,
+            canBeCorrected: false,
+            reason: '',
+            actionText: '',
           }] });
         }
       } catch (e: any) {
@@ -60,6 +69,9 @@ export class TodoWorkComponent implements OnInit {
             type: '',
             correctValue: '',
             generator: generator,
+            canBeCorrected: false,
+            reason: '',
+            actionText: '',
           }] });
       }
     }

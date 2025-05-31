@@ -5,6 +5,9 @@ export interface TodoItem {
   name: string;
   type: string;
   wrongValue: string;
+  canBeCorrected: boolean;
+  reason: string;
   correctValue: string;
   generator: TodoGenerator;
+  actionText: string;
 }

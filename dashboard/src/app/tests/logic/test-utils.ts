@@ -10,7 +10,7 @@ export async function fetchJson(url: string, options: any = {}): Promise<any> {
 
 export async function fetchHikes(supabaseUrl: string, supabaseKey: string): Promise<any[]> {
   const { data } = await fetchJson(
-    `${supabaseUrl}/rest/v1/hikes?select=id,name_de,state,is_example,technical_difficulty,conditional_difficulty,hike_type_id,hike_duration_in_min`,
+    `${supabaseUrl}/rest/v1/hikes?select=id,name_de,editor_status,is_example,technical_difficulty,conditional_difficulty,hike_type_id,hike_duration_in_min`,
     {
       headers: {
         apikey: supabaseKey,
@@ -18,7 +18,8 @@ export async function fetchHikes(supabaseUrl: string, supabaseKey: string): Prom
       },
     },
   );
-  return data.filter((h: any) => !h.is_example && h.state === 1);
+
+  return data.filter((h: any) => !h.is_example && h.editor_status === 'published');
 }
 
 export function mapHikeIdToName(hikes: any[]): Record<string, string> {

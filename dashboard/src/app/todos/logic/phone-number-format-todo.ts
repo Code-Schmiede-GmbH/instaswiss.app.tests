@@ -27,7 +27,10 @@ export class PhoneNumberFormatTodoGenerator implements TodoGenerator {
       type: 'accomodation',
       wrongValue: a.phone_number,
       correctValue: '',
+      canBeCorrected: true,
+      reason: '',
       generator: this,
+      actionText: 'Verbessern',
     }));
   }
 

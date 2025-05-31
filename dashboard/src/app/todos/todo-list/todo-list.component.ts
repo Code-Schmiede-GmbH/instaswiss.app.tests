@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { WebcamUrlImageTodoGenerator } from '../logic/webcam-url-image-todo';
 import { PhoneNumberFormatTodoGenerator } from '../logic/phone-number-format-todo';
+import { SvgMapTodo } from '../logic/svgmap-todo';
 
 interface TodoResult {
   name: string;
@@ -45,6 +46,7 @@ export class TodoListComponent {
     const todoGenerators = [
       new PhoneNumberFormatTodoGenerator(),
       new WebcamUrlImageTodoGenerator(),
+      new SvgMapTodo(),
       // Add more generators here
     ];
     const results: TodoResult[] = todoGenerators.map(g => ({ name: g.name, loading: true }));
