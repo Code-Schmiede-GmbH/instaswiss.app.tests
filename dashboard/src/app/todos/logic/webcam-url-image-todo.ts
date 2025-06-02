@@ -17,13 +17,17 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
         },
       },
     );
+
     if (!Array.isArray(hikes)) throw new Error('Could not fetch hikes');
+
     const wrong: TodoItem[] = [];
     for (const h of hikes) {
       if (!h.webcam_url || typeof h.webcam_url !== 'string') continue;
+
       const url = h.webcam_url.trim();
       if (!url) continue;
-      const valid = this.isImageUrl(url);
+
+      const valid = this.isValidImageUrl(url);
       if (!valid) {
         wrong.push({
           id: String(h.id),
@@ -58,8 +62,8 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
     }
   }
 
-  private isImageUrl(url: string): boolean {
-    // Accept common image extensions
-    return /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(url.split('?')[0]);
+  private isValidImageUrl(url: string): boolean {
+    return /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(url.split('?')[0])
+      || url.startsWith('https://api.windy.com');
   }
 } 
