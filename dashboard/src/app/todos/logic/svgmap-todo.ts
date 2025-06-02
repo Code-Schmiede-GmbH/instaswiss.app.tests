@@ -23,7 +23,12 @@ export class SvgMapTodo implements TodoGenerator {
     const missing: TodoItem[] = [];
 
     for (const h of hikes) {
-      if (!h.svg_map || typeof h.svg_map !== 'string' || !h.svg_map.trim()) {
+      if (
+        !h.svg_map
+        || typeof h.svg_map !== 'string'
+        || !h.svg_map.trim()
+        || h.svg_map.includes('stroke="#FFFFFF"')
+      ) {
         missing.push({
           id: String(h.id),
           name: h.name_de,
