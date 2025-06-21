@@ -9,6 +9,11 @@
 </div>
 @if (todo.items && todo.items.length && expanded) {
   <div class="todo-items-list" style="margin-left: 2rem;">
+    <button mat-flat-button color="accent" style="margin-bottom: 1rem;"
+      (click)="executeAllActions()"
+      [disabled]="!canExecuteAllActions">
+      Alle Aktionen ausführen
+    </button>
     <table>
       <thead>
         <tr>
@@ -22,7 +27,7 @@
           <tr>
             <td>{{ item.name }}</td>
             <td>
-                @if (item.canBeCorrected) {
+                @if (item.canBeCorrected && !item.isAction) {
                 <input 
                   #inputRef
                   style="border: none; border-bottom: 1px solid #c4c4c4; outline: none; padding: 8px 0; font: inherit; background: transparent; width: 100%; transition: border-color 0.2s;"
@@ -37,7 +42,7 @@
                 }
             </td>
             <td>
-              <button mat-flat-button color="primary" [disabled]="!item.canBeCorrected" (click)="saveFix(item)">{{ item.actionText }}</button>
+              <button mat-flat-button color="primary" [disabled]="!item.canBeCorrected || !item.isAction" (click)="saveFix(item)">{{ item.actionText }}</button>
             </td>
           </tr>
         }

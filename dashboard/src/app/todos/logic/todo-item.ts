@@ -8,6 +8,7 @@ export interface TodoItem {
   canBeCorrected: boolean;
   reason: string;
   correctValue: string;
+  isAction: boolean;
   generator: TodoGenerator;
   actionText: string;
 }

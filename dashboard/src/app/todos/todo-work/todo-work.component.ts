@@ -1,13 +1,12 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BaseModalComponent } from "../../base-modal/base-modal.component";
 import { TodoItem } from '../logic/todo-item';
 import { ExpandableTodoItemComponent } from './expandable-todo-item/expandable-todo-item.component';
-import { PhoneNumberFormatTodoGenerator } from '../logic/phone-number-format-todo';
-import { WebcamUrlImageTodoGenerator } from '../logic/webcam-url-image-todo';
-import { SvgMapTodo } from '../logic/svgmap-todo';
+import { TodoService } from '../todo.service';
+import { TodoGenerator } from '../logic/todo-generator';
 
 @Component({
   selector: 'app-todo-work',
@@ -19,35 +18,30 @@ import { SvgMapTodo } from '../logic/svgmap-todo';
 export class TodoWorkComponent implements OnInit {
   @Output() back = new EventEmitter<void>();
   title = 'Todos bearbeiten';
-  todos: { name: string; items?: TodoItem[] }[] = [];
-  loading = true;
+  todos: { name: string; items?: TodoItem[], generator: TodoGenerator }[] = [];
+  loading: WritableSignal<boolean>;
+
+  constructor(private todoService: TodoService) {
+    this.loading = this.todoService.loading;
+  }
 
   async ngOnInit() {
-    this.loading = true;
-    const todoGenerators = [
-      new PhoneNumberFormatTodoGenerator(),
-      new WebcamUrlImageTodoGenerator(),
-      new SvgMapTodo(),
-    ];
-    const results: { name: string; items?: TodoItem[] }[] = [];
+    this.loading.set(true);
+
+    const todoGenerators = this.todoService.generators;
+    const results: { name: string; items?: TodoItem[], generator: TodoGenerator }[] = [];
+
     for (const generator of todoGenerators) {
       try {
-        const res = await generator.getTodos();
+        const res = await generator.getTodos(true);
 
         if (Array.isArray(res) && res.length === 0) {
-          results.push({ name: generator.name });
+          results.push({ name: generator.name, generator });
         } else if (Array.isArray(res)) {
           results.push({ name: generator.name, items: res.map((n: TodoItem) => ({
-            name: n.name,
-            wrongValue: n.wrongValue,
-            id: n.id,
-            type: n.type,
-            correctValue: n.correctValue,
+            ...n,
             generator: generator,
-            canBeCorrected: n.canBeCorrected,
-            reason: n.reason,
-            actionText: n.actionText,
-          })) });
+          })), generator });
         } else {
           results.push({ name: generator.name, items: [{
             name: JSON.stringify(res),
@@ -59,7 +53,8 @@ export class TodoWorkComponent implements OnInit {
             canBeCorrected: false,
             reason: '',
             actionText: '',
-          }] });
+            isAction: false,
+          }], generator });
         }
       } catch (e: any) {
         results.push({ name: generator.name, items: [{
@@ -72,10 +67,12 @@ export class TodoWorkComponent implements OnInit {
             canBeCorrected: false,
             reason: '',
             actionText: '',
-          }] });
+            isAction: false,
+          }], generator });
       }
     }
+
     this.todos = results;
-    this.loading = false;
+    this.loading.set(false);
   }
 } 

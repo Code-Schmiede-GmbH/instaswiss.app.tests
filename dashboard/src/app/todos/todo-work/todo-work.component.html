@@ -1,6 +1,6 @@
 <app-base-modal [title]="title" (back)="back.emit()">
   <div class="todo-work-container">
-    <ng-container *ngIf="loading; else todoList">
+    <ng-container *ngIf="loading(); else todoList">
       <p>Lädt To-Dos...</p>
     </ng-container>
     <ng-template #todoList>

@@ -4,7 +4,13 @@ import type { TodoGenerator } from './todo-generator';
 
 export class PhoneNumberFormatTodoGenerator implements TodoGenerator {
   public readonly name = 'Telefonnummern korrigieren';
-  async getTodos(): Promise<TodoItem[]> {
+  private cachedTodos: TodoItem[] = [];
+
+  async getTodos(cached: boolean): Promise<TodoItem[]> {
+    if (cached && this.cachedTodos.length > 0) {
+      return this.cachedTodos;
+    }
+
     const supabaseKey = getApiKey();
     const { data: accomodations } = await fetchJson(
       `${SUPABASE_URL}/rest/v1/accomodations?select=id,name,phone_number`,
@@ -21,7 +27,8 @@ export class PhoneNumberFormatTodoGenerator implements TodoGenerator {
     const wrong = accomodations.filter(
       (a: any) => typeof a.phone_number !== 'string' || !this.isSwissPhoneNumber(a.phone_number)
     );
-    return wrong.map((a: any) => ({
+    
+    this.cachedTodos = wrong.map((a: any) => ({
       id: a.id,
       name: a.name,
       type: 'accomodation',
@@ -31,7 +38,10 @@ export class PhoneNumberFormatTodoGenerator implements TodoGenerator {
       reason: '',
       generator: this,
       actionText: 'Verbessern',
+      isAction: false,
     }));
+
+    return this.cachedTodos;
   }
 
   async fixTodo(id: string, correctValue: string): Promise<void> {

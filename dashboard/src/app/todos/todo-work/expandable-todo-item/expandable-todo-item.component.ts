@@ -36,4 +36,17 @@ export class ExpandableTodoItemComponent {
   setInputActive(input: HTMLInputElement, active: boolean) {
     input.style.borderBottomColor = active ? '#3f51b5' : '#c4c4c4';
   }
+
+  get canExecuteAllActions(): boolean {
+    return !!this.todo.items?.some(item => item.isAction && item.canBeCorrected);
+  }
+
+  executeAllActions() {
+    if (!this.todo.items) return;
+    this.todo.items.forEach(item => {
+      if (item.isAction && item.canBeCorrected) {
+        this.saveFix(item);
+      }
+    });
+  }
 } 

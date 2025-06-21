@@ -5,8 +5,13 @@ import { TodoGenerator } from './todo-generator';
 
 export class SvgMapTodo implements TodoGenerator {
   public readonly name = 'Hike ohne SVG-Map';
+  private cachedTodos: TodoItem[] = [];
 
-  async getTodos(): Promise<TodoItem[]> {
+  async getTodos(cached: boolean): Promise<TodoItem[]> {
+    if (cached && this.cachedTodos.length > 0) {
+      return this.cachedTodos;
+    }
+
     const supabaseKey = getApiKey();
     const { data: hikes } = await fetchJson(
       `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,svg_map,location`,
@@ -20,16 +25,16 @@ export class SvgMapTodo implements TodoGenerator {
 
     if (!Array.isArray(hikes)) throw new Error('Could not fetch hikes');
 
-    const missing: TodoItem[] = [];
+    const items: TodoItem[] = [];
 
     for (const h of hikes) {
-      if (
-        !h.svg_map
-        || typeof h.svg_map !== 'string'
-        || !h.svg_map.trim()
-        || h.svg_map.includes('stroke="#FFFFFF"')
-      ) {
-        missing.push({
+      // if (
+      //   !h.svg_map
+      //   || typeof h.svg_map !== 'string'
+      //   || !h.svg_map.trim()
+      //   || h.svg_map.includes('stroke="#FFFFFF"')
+      // ) {
+        items.push({
           id: String(h.id),
           name: h.name_de,
           type: 'hike',
@@ -39,11 +44,14 @@ export class SvgMapTodo implements TodoGenerator {
           reason: h.location != null ? '' : 'Keine Location',
           generator: this,
           actionText: 'Generieren',
+          isAction: true,
         });
-      }
+      // }
     }
 
-    return missing;
+    this.cachedTodos = items;
+
+    return this.cachedTodos;
   }
 
   async fixTodo(id: string, correctValue: string): Promise<void> {

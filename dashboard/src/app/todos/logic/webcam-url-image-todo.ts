@@ -5,8 +5,13 @@ import { TodoGenerator } from './todo-generator';
 
 export class WebcamUrlImageTodoGenerator implements TodoGenerator {
   public readonly name = 'Webcam-URL auf Bild prüfen';
-  
-  async getTodos(): Promise<TodoItem[]> {
+  private cachedTodos: TodoItem[] = [];
+
+  async getTodos(cached: boolean): Promise<TodoItem[]> {
+    if (cached && this.cachedTodos.length > 0) {
+      return this.cachedTodos;
+    }
+
     const supabaseKey = getApiKey();
     const { data: hikes } = await fetchJson(
       `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,webcam_url`,
@@ -20,7 +25,7 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
 
     if (!Array.isArray(hikes)) throw new Error('Could not fetch hikes');
 
-    const wrong: TodoItem[] = [];
+    const items: TodoItem[] = [];
     for (const h of hikes) {
       if (!h.webcam_url || typeof h.webcam_url !== 'string') continue;
 
@@ -29,7 +34,7 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
 
       const valid = this.isValidImageUrl(url);
       if (!valid) {
-        wrong.push({
+        items.push({
           id: String(h.id),
           name: h.name_de,
           type: 'hike',
@@ -39,10 +44,14 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
           reason: '',
           generator: this,
           actionText: 'Verbessern',
+          isAction: false,
         });
       }
     }
-    return wrong;
+
+    this.cachedTodos = items;
+
+    return this.cachedTodos;
   }
 
   async fixTodo(id: string, correctValue: string): Promise<void> {
