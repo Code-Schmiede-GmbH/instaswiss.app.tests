@@ -28,18 +28,21 @@ export class PhoneNumberFormatTodoGenerator implements TodoGenerator {
       (a: any) => typeof a.phone_number !== 'string' || !this.isSwissPhoneNumber(a.phone_number)
     );
     
-    this.cachedTodos = wrong.map((a: any) => ({
-      id: a.id,
-      name: a.name,
-      type: 'accomodation',
-      wrongValue: a.phone_number,
-      correctValue: '',
-      canBeCorrected: true,
-      reason: '',
-      generator: this,
-      actionText: 'Verbessern',
-      isAction: false,
-    }));
+    this.cachedTodos = wrong.map((a: any) => {
+      return ({
+        id: a.id,
+        name: a.name,
+        creator: '',
+        type: 'accomodation',
+        wrongValue: a.phone_number,
+        correctValue: '',
+        canBeCorrected: true,
+        reason: '',
+        generator: this,
+        actionText: 'Verbessern',
+        isAction: false,
+      });
+    });
 
     return this.cachedTodos;
   }

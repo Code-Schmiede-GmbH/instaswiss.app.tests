@@ -2,10 +2,16 @@ import { fetchJson, SUPABASE_URL } from '../../tests/logic/test-utils';
 import { getApiKey } from '../../tests/logic/test-utils';
 import type { TodoItem } from './todo-item';
 import { TodoGenerator } from './todo-generator';
+import { TodoService } from '../todo.service';
 
 export class SvgMapTodo implements TodoGenerator {
   public readonly name = 'Hike ohne SVG-Map';
   private cachedTodos: TodoItem[] = [];
+  private todoService: TodoService;
+
+  constructor(todoService: TodoService) {
+    this.todoService = todoService;
+  }
 
   async getTodos(cached: boolean): Promise<TodoItem[]> {
     if (cached && this.cachedTodos.length > 0) {
@@ -14,7 +20,7 @@ export class SvgMapTodo implements TodoGenerator {
 
     const supabaseKey = getApiKey();
     const { data: hikes } = await fetchJson(
-      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,svg_map,location`,
+      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,svg_map,location,creator_id`,
       {
         headers: {
           apikey: supabaseKey,
@@ -28,6 +34,8 @@ export class SvgMapTodo implements TodoGenerator {
     const items: TodoItem[] = [];
 
     for (const h of hikes) {
+      const creator = this.todoService.creators().find(c => c.id === h.creator_id);
+      
       // if (
       //   !h.svg_map
       //   || typeof h.svg_map !== 'string'
@@ -37,6 +45,7 @@ export class SvgMapTodo implements TodoGenerator {
         items.push({
           id: String(h.id),
           name: h.name_de,
+          creator: creator?.nickname || '',
           type: 'hike',
           wrongValue: h.svg_map,
           correctValue: '',

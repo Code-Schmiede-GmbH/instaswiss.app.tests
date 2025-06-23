@@ -2,10 +2,16 @@ import { fetchJson, SUPABASE_URL } from '../../tests/logic/test-utils';
 import { getApiKey } from '../../tests/logic/test-utils';
 import type { TodoItem } from './todo-item';
 import { TodoGenerator } from './todo-generator';
+import { TodoService } from '../todo.service';
 
 export class WebcamUrlImageTodoGenerator implements TodoGenerator {
   public readonly name = 'Webcam-URL auf Bild prüfen';
   private cachedTodos: TodoItem[] = [];
+  private todoService: TodoService;
+
+  constructor(todoService: TodoService) {
+    this.todoService = todoService;
+  }
 
   async getTodos(cached: boolean): Promise<TodoItem[]> {
     if (cached && this.cachedTodos.length > 0) {
@@ -14,7 +20,7 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
 
     const supabaseKey = getApiKey();
     const { data: hikes } = await fetchJson(
-      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,webcam_url`,
+      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,webcam_url,creator_id`,
       {
         headers: {
           apikey: supabaseKey,
@@ -34,9 +40,12 @@ export class WebcamUrlImageTodoGenerator implements TodoGenerator {
 
       const valid = this.isValidImageUrl(url);
       if (!valid) {
+        const creator = this.todoService.creators().find(c => c.id === h.creator_id);
+
         items.push({
           id: String(h.id),
           name: h.name_de,
+          creator: creator?.nickname || '',
           type: 'hike',
           wrongValue: h.webcam_url,
           correctValue: '',

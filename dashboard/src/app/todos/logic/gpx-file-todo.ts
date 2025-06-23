@@ -1,10 +1,16 @@
 import { getApiKey, fetchJson, SUPABASE_URL } from '../../tests/logic/test-utils';
 import type { TodoItem } from './todo-item';
 import type { TodoGenerator } from './todo-generator';
+import { TodoService } from '../todo.service';
 
 export class GpxFileTodoGenerator implements TodoGenerator {
   public readonly name = 'Fehlende GPX-Dateien';
   private cachedTodos: TodoItem[] = [];
+  private todoService: TodoService;
+
+  constructor(todoService: TodoService) {
+    this.todoService = todoService;
+  }
 
   async getTodos(cached: boolean): Promise<TodoItem[]> {
     if (cached && this.cachedTodos.length > 0) {
@@ -13,7 +19,7 @@ export class GpxFileTodoGenerator implements TodoGenerator {
 
     const supabaseKey = getApiKey();
     const { data: hikes } = await fetchJson(
-      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,gpx_file`,
+      `${SUPABASE_URL}/rest/v1/hikes?select=id,name_de,gpx_file,creator_id`,
       {
         headers: {
           apikey: supabaseKey,
@@ -85,17 +91,22 @@ export class GpxFileTodoGenerator implements TodoGenerator {
       }
     }
 
-    this.cachedTodos = wrongHikes.map((h: any) => ({
-      id: h.id,
-      name: h.name,
-      type: 'hike',
-      wrongValue: h.reason,
-      correctValue: '',
-      canBeCorrected: false,
-      reason: h.reason,
-      generator: this,
-      actionText: 'Korrekte GPX-Datei in Directus hochladen',
-      isAction: false,
+    this.cachedTodos = await Promise.all(wrongHikes.map(async (h: any) => {
+      const creator = this.todoService.creators().find(c => c.id === h.creator_id);
+
+      return ({
+        id: h.id,
+        name: h.name,
+        creator: creator?.nickname || '',
+        type: 'hike',
+        wrongValue: h.reason,
+        correctValue: '',
+        canBeCorrected: false,
+        reason: h.reason,
+        generator: this,
+        actionText: 'Korrekte GPX-Datei in Directus hochladen',
+        isAction: false,
+      });
     }));
 
     return this.cachedTodos;

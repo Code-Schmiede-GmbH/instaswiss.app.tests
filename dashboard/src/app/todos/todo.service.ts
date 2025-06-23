@@ -4,6 +4,7 @@ import { PhoneNumberFormatTodoGenerator } from './logic/phone-number-format-todo
 import { SvgMapTodo } from './logic/svgmap-todo';
 import { GpxFileTodoGenerator } from './logic/gpx-file-todo';
 import { TodoGenerator } from './logic/todo-generator';
+import { fetchJson, getApiKey, SUPABASE_URL } from '../tests/logic/test-utils';
 
 export interface TodoResult {
   name: string;
@@ -12,22 +13,29 @@ export interface TodoResult {
   error?: string;
 }
 
+export interface Creator {
+  id: string;
+  nickname: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
   todos = signal<TodoResult[]>([]);
   loading = signal(true);
+  creators = signal<Creator[]>([]);
 
   public generators: TodoGenerator[] = [
     new PhoneNumberFormatTodoGenerator(),
-    new WebcamUrlImageTodoGenerator(),
-    new SvgMapTodo(),
-    new GpxFileTodoGenerator(),
+    new WebcamUrlImageTodoGenerator(this),
+    new SvgMapTodo(this),
+    new GpxFileTodoGenerator(this),
   ];
 
   constructor() {
     this.loadTodos();
+    this.loadCreators();
   }
 
   async loadTodos() {
@@ -57,5 +65,17 @@ export class TodoService {
     }
 
     this.loading.set(false);
+  }
+
+  async loadCreators() {
+    const supabaseKey = getApiKey();
+    const { data: creators } = await fetchJson(`${SUPABASE_URL}/rest/v1/directus_users?select=id,nickname`, {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    });
+
+    this.creators.set(creators.map((c: any) => ({ id: c.id, nickname: c.nickname })));
   }
 }

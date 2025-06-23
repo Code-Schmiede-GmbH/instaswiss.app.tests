@@ -3,6 +3,7 @@ import { TodoGenerator } from "./todo-generator";
 export interface TodoItem {
   id: string;
   name: string;
+  creator: string;
   type: string;
   wrongValue: string;
   canBeCorrected: boolean;

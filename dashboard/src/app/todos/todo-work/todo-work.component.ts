@@ -45,6 +45,7 @@ export class TodoWorkComponent implements OnInit {
         } else {
           results.push({ name: generator.name, items: [{
             name: JSON.stringify(res),
+            creator: '',
             wrongValue: '',
             id: '',
             type: '',
@@ -59,6 +60,7 @@ export class TodoWorkComponent implements OnInit {
       } catch (e: any) {
         results.push({ name: generator.name, items: [{
             name: e?.message || e,
+            creator: '',
             wrongValue: '',
             id: '',
             type: '',
