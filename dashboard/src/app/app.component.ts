@@ -7,13 +7,19 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TestResultsService } from './tests/test-results.service';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 import { ApiKeyInputComponent } from './api-key-input/api-key-input.component';
 import { DashboardMainViewComponent } from './dashboard-main-view/dashboard-main-view.component';
 import { TestResultsViewComponent } from './tests/test-results-view/test-results-view.component';
-import { SUPABASE_URL } from './tests/logic/test-utils';
-import { fetchHikes } from './tests/logic/test-utils';
-import { TodoWorkComponent } from "./todos/todo-work/todo-work.component";
+import { HikeWithCreator, SUPABASE_URL } from './tests/logic/test-utils';
+import { fetchHikes, fetchAllHikes } from './tests/logic/test-utils';
+import { TodoWorkComponent } from './todos/todo-work/todo-work.component';
 
 @Component({
   selector: 'app-root',
@@ -28,8 +34,8 @@ import { TodoWorkComponent } from "./todos/todo-work/todo-work.component";
     ApiKeyInputComponent,
     DashboardMainViewComponent,
     TestResultsViewComponent,
-    TodoWorkComponent
-],
+    TodoWorkComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations: [
@@ -38,32 +44,37 @@ import { TodoWorkComponent } from "./todos/todo-work/todo-work.component";
       state('hidden', style({ transform: 'translateY(-120%)', opacity: 0 })),
       state('left', style({ transform: 'translateX(-120%)', opacity: 0 })),
       transition('visible => hidden', [
-        animate('600ms cubic-bezier(0.77,0,0.175,1)')
+        animate('600ms cubic-bezier(0.77,0,0.175,1)'),
       ]),
       transition('hidden => visible', [
-        animate('400ms cubic-bezier(0.77,0,0.175,1)')
+        animate('400ms cubic-bezier(0.77,0,0.175,1)'),
       ]),
       transition('visible => left', [
-        animate('600ms cubic-bezier(0.77,0,0.175,1)')
+        animate('600ms cubic-bezier(0.77,0,0.175,1)'),
       ]),
       transition('left => visible', [
-        animate('400ms cubic-bezier(0.77,0,0.175,1)')
+        animate('400ms cubic-bezier(0.77,0,0.175,1)'),
       ]),
     ]),
     trigger('testResultsFade', [
-      state('hidden', style({ opacity: 0, transform: 'scale(0.95) translateY(40px)' })),
-      state('visible', style({ opacity: 1, transform: 'scale(1) translateY(0)' })),
+      state(
+        'hidden',
+        style({ opacity: 0, transform: 'scale(0.95) translateY(40px)' }),
+      ),
+      state(
+        'visible',
+        style({ opacity: 1, transform: 'scale(1) translateY(0)' }),
+      ),
       transition('hidden => visible', [
-        animate('500ms 100ms cubic-bezier(0.77,0,0.175,1)')
+        animate('500ms 100ms cubic-bezier(0.77,0,0.175,1)'),
       ]),
       transition('visible => hidden', [
-        animate('300ms cubic-bezier(0.77,0,0.175,1)')
+        animate('300ms cubic-bezier(0.77,0,0.175,1)'),
       ]),
     ]),
   ],
 })
 export class AppComponent {
-  hikeCount = signal<number | null>(null);
   apiKey = signal<string>('');
   inputApiKey = signal<string>('');
   testResults = signal<any[]>([]);
@@ -72,6 +83,8 @@ export class AppComponent {
   showTestResultsModal = signal(false);
   showTodoWorkView = signal(false);
   showTodoWorkViewModal = signal(false);
+  hikes = signal<HikeWithCreator[]>([]);
+  totalHikeCount = signal<number>(0);
 
   constructor(private testResultsService: TestResultsService) {
     const storedKey = localStorage.getItem('apiKey') || '';
@@ -107,19 +120,26 @@ export class AppComponent {
     localStorage.removeItem('apiKey');
     this.apiKey.set('');
     this.inputApiKey.set('');
-    this.hikeCount.set(null);
+    this.hikes.set([]);
+    this.totalHikeCount.set(0);
   }
 
   async fetchHikeCount() {
     if (!this.apiKey()) {
-      this.hikeCount.set(null);
+      this.hikes.set([]);
+      this.totalHikeCount.set(0);
       return;
     }
     try {
-      const hikes = await fetchHikes(SUPABASE_URL, this.apiKey());
-      this.hikeCount.set(Array.isArray(hikes) ? hikes.length : 0);
+      const [hikes, totalCount] = await Promise.all([
+        fetchHikes(SUPABASE_URL, this.apiKey()),
+        fetchAllHikes(SUPABASE_URL, this.apiKey()),
+      ]);
+      this.hikes.set(hikes);
+      this.totalHikeCount.set(totalCount);
     } catch (e) {
-      this.hikeCount.set(0);
+      this.hikes.set([]);
+      this.totalHikeCount.set(0);
     }
   }
 
@@ -138,10 +158,18 @@ export class AppComponent {
   }
 
   showTodoWork() {
-    this.showModalWithDelay(this.showTodoWorkView, this.showTodoWorkViewModal, 600);
+    this.showModalWithDelay(
+      this.showTodoWorkView,
+      this.showTodoWorkViewModal,
+      600,
+    );
   }
 
   hideTodoWork() {
-    this.hideModalWithDelay(this.showTodoWorkView, this.showTodoWorkViewModal, 400);
+    this.hideModalWithDelay(
+      this.showTodoWorkView,
+      this.showTodoWorkViewModal,
+      400,
+    );
   }
 }

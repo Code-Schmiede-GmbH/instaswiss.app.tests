@@ -13,8 +13,8 @@
 }
 
 .frosted-glass-container {
-  background: rgba(255,255,255,0.35);
-  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 24px;
@@ -50,20 +50,79 @@
 
 .dashboard-content {
   display: flex;
+  flex-direction: column;
   gap: 32px;
   margin: 32px 0 24px 0;
   justify-content: center;
 }
 
+.stats-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.stats-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.total-hike-count {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #ffb300;
+}
+
+.total-hike-count-small {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #666;
+  margin-top: 4px;
+}
+
+.stats-row {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+}
+
 .dashboard-card {
-  background: rgba(255,255,255,0.85);
-  border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 32px 36px;
-  min-width: 220px;
+  max-height: 350px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+.hike-list-scroll-wrapper {
+  margin-top: 12px;
+}
+
+.hike-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hike-list-table th,
+.hike-list-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+.creator-stats-table {
+  width: 100%;
+  margin-bottom: 8px;
+  border-collapse: collapse;
+}
+
+.creator-stats-table th,
+.creator-stats-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 0.95em;
 }
 
 .card-title {
@@ -72,10 +131,42 @@
   margin-bottom: 18px;
 }
 
+.hike-count-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 32px;
+}
+
+.stats-column {
+  flex: 1;
+}
+
+.inputs-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hike-count-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .hike-count {
   font-size: 3.2rem;
   font-weight: 700;
   color: #ffb300;
+}
+
+.total-revenue {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #666;
+  margin-top: 4px;
 }
 
 .todo-list {
@@ -97,11 +188,76 @@
   background: #fff;
   color: #222;
   border: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .run-tests-btn:hover {
   background: #f5f5f5;
-} 
+}
+
+.no-data {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 16px;
+}
+
+.pot-input-container {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.pot-input-field {
+  width: 180px;
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  ::ng-deep .mat-mdc-form-field-outline {
+    color: #ffb300;
+  }
+
+  ::ng-deep .mat-mdc-form-field-outline-thick {
+    color: #ffb300;
+  }
+
+  ::ng-deep .mat-mdc-form-field-focus-overlay {
+    background-color: rgba(255, 179, 0, 0.1);
+  }
+}
+
+.date-input-container {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.date-input-field {
+  width: 180px;
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  ::ng-deep .mat-mdc-form-field-outline {
+    color: #ffb300;
+  }
+
+  ::ng-deep .mat-mdc-form-field-outline-thick {
+    color: #ffb300;
+  }
+
+  ::ng-deep .mat-mdc-form-field-focus-overlay {
+    background-color: rgba(255, 179, 0, 0.1);
+  }
+}
+
+.pot-share {
+  font-weight: 600;
+  color: #ffb300;
+  text-align: right;
+}

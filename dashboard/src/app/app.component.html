@@ -1,16 +1,21 @@
 @if (!apiKey()) {
-  <app-api-key-input (apiKeySaved)="handleApiKeySaved($event)" (apiKeyRemoved)="clearApiKey()"></app-api-key-input>
+  <app-api-key-input
+    (apiKeySaved)="handleApiKeySaved($event)"
+    (apiKeyRemoved)="clearApiKey()"
+  ></app-api-key-input>
 } @else {
   <div class="background-image"></div>
   <div class="app-vertical-stack">
     <!-- Dashboard always rendered, animation state controlled by dashboardAnimationState -->
     <div class="centered-abs">
       <app-dashboard-main-view
-        [hikeCount]="hikeCount()"
+        [hikes]="hikes()"
+        [totalHikeCount]="totalHikeCount()"
         (runTests)="runTests()"
         (removeApiKey)="clearApiKey()"
         (workViewRequested)="showTodoWork()"
-        [@dashboardSlide]="dashboardAnimationState">
+        [@dashboardSlide]="dashboardAnimationState"
+      >
       </app-dashboard-main-view>
     </div>
     <!-- Todo Work Modal -->
@@ -22,7 +27,11 @@
     <!-- Test Results Modal -->
     @if (showTestResultsModal()) {
       <div class="centered-abs">
-        <app-test-results-view [testResults]="testResults()" [testsLoading]="testsLoading()" (backToDashboard)="backToDashboard()"></app-test-results-view>
+        <app-test-results-view
+          [testResults]="testResults()"
+          [testsLoading]="testsLoading()"
+          (backToDashboard)="backToDashboard()"
+        ></app-test-results-view>
       </div>
     }
   </div>

@@ -70,3 +70,4 @@ export class PhoneNumberFormatTodoGenerator implements TodoGenerator {
     return swissPhoneRegex.test(phone.replace(/\s+/g, ' '));
   }
 }
+

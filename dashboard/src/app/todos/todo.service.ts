@@ -4,6 +4,7 @@ import { PhoneNumberFormatTodoGenerator } from './logic/phone-number-format-todo
 import { SvgMapTodo } from './logic/svgmap-todo';
 import { GpxFileTodoGenerator } from './logic/gpx-file-todo';
 import { TodoGenerator } from './logic/todo-generator';
+import { HikeSharpSStoSSTodoGenerator } from './logic/hike-sharp-ss-to-ss-todo';
 import { fetchJson, getApiKey, SUPABASE_URL } from '../tests/logic/test-utils';
 
 export interface TodoResult {
@@ -30,7 +31,8 @@ export class TodoService {
     new PhoneNumberFormatTodoGenerator(),
     new WebcamUrlImageTodoGenerator(this),
     new SvgMapTodo(this),
-    new GpxFileTodoGenerator(this),
+    // new GpxFileTodoGenerator(this),
+    new HikeSharpSStoSSTodoGenerator(this),
   ];
 
   constructor() {
