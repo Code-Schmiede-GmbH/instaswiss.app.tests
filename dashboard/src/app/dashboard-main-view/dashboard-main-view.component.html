@@ -16,137 +16,22 @@
     </div>
     <div class="dashboard-content">
       <div class="stats-header">
-        <div class="stats-title">Anzahl veröffentlichter Wanderungen</div>
+        <div class="stats-title">Anzahl veröffentlichter Wanderungen heute</div>
         <div class="total-hike-count">{{ hikes.length }}</div>
-        <div class="total-hike-count-small">Gesamt: {{ totalHikeCount }}</div>
+        <div class="total-hike-count-small">Inklusive Unveröffentlichte: {{ totalHikeCount }}</div>
       </div>
-      <div class="stats-row">
-        <div class="dashboard-card">
-          <div class="card-title">
-            Lifetime Subscription (vor 24. Juli 2025)
-          </div>
-          <div class="hike-count-container">
-            <div class="hike-count">{{ lifetimeSubscriptionTotal }}</div>
-            <div class="pot-input-container">
-              <mat-form-field appearance="outline" class="pot-input-field">
-                <mat-label>Gesamt (CHF)</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  [(ngModel)]="lifetimeSubscriptionPot"
-                  placeholder="0"
-                  min="0"
-                  step="0.01"
-                />
-              </mat-form-field>
-            </div>
-          </div>
-          @if (lifetimeSubscriptionStats.length > 0) {
-            <table class="creator-stats-table">
-              <thead>
-                <tr>
-                  <th>Creator</th>
-                  <th>Anzahl</th>
-                  <th>%</th>
-                  <th>Anteil (CHF)</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (stat of lifetimeSubscriptionStats; track stat.name) {
-                  <tr>
-                    <td>{{ stat.name }}</td>
-                    <td>{{ stat.count }}</td>
-                    <td>{{ stat.percent }}</td>
-                    <td class="pot-share">{{ stat.potShare.toFixed(2) }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          }
-        </div>
-        <div class="dashboard-card">
-          <div class="card-title">Yearly Subscriptions</div>
-          <div class="hike-count-container">
-            <div class="stats-column">
-              <div class="hike-count-section">
-                <div class="hike-count">{{ yearlySubscriptionTotal }}</div>
-                <div class="total-revenue">
-                  Gesamt: {{ yearlySubscriptionTotalRevenue.toFixed(2) }} CHF
-                </div>
-              </div>
-            </div>
-            <div class="inputs-column">
-              <div class="pot-input-container">
-                <mat-form-field appearance="outline" class="pot-input-field">
-                  <mat-label>Preis pro Jahr (CHF)</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    [(ngModel)]="yearlySubscriptionPrice"
-                    placeholder="0"
-                    min="0"
-                    step="0.01"
-                  />
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="pot-input-field">
-                  <mat-label>Anteil für Creator (%)</mat-label>
-                  <input
-                    matInput
-                    type="number"
-                    [(ngModel)]="yearlySubscriptionCreatorShare"
-                    placeholder="100"
-                    min="0"
-                    max="100"
-                    step="1"
-                  />
-                </mat-form-field>
-              </div>
-              <div class="date-input-container">
-                <mat-form-field appearance="outline" class="date-input-field">
-                  <mat-label>Startdatum</mat-label>
-                  <input
-                    matInput
-                    type="date"
-                    [(ngModel)]="yearlySubscriptionStartDate"
-                  />
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="date-input-field">
-                  <mat-label>Enddatum</mat-label>
-                  <input
-                    matInput
-                    type="date"
-                    [(ngModel)]="yearlySubscriptionEndDate"
-                  />
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-          @if (yearlySubscriptionStats.length > 0) {
-            <table class="creator-stats-table">
-              <thead>
-                <tr>
-                  <th>Creator</th>
-                  <th>Ø Anteil Hikes</th>
-                  <th>Anteil (CHF)</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (stat of yearlySubscriptionStats; track stat.name) {
-                  <tr>
-                    <td>{{ stat.name }}</td>
-                    <td>{{ stat.averageHikeShare.toFixed(1) }}%</td>
-                    <td class="pot-share">{{ stat.potShare.toFixed(2) }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          } @else {
-            <div class="no-data">Noch nicht implementiert</div>
-          }
-        </div>
-      </div>
+      <app-subscription-stats [hikes]="hikes"></app-subscription-stats>
       <div class="dashboard-card">
-        <div class="card-title">Alle Wanderungen</div>
+        <div class="card-title">
+          Alle Wanderungen
+          <button 
+            class="toggle-hikes-btn"
+            mat-stroked-button
+            (click)="toggleHikeList()"
+          >
+            {{ showAllHikes ? 'Weniger anzeigen' : 'Alle anzeigen' }}
+          </button>
+        </div>
         <div class="hike-list-scroll-wrapper">
           <table class="hike-list-table">
             <thead>
@@ -157,7 +42,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (hike of hikes; track hike.id) {
+              @for (hike of displayedHikes; track hike.id) {
                 <tr>
                   <td>{{ hike.name_de }}</td>
                   <td>
@@ -165,6 +50,13 @@
                     {{ hike.creator.last_name || hike.creator.email || '' }}
                   </td>
                   <td>{{ hike.date_created | date: 'dd.MM.yyyy' }}</td>
+                </tr>
+              }
+              @if (!showAllHikes && sortedHikes.length > maxVisibleHikes) {
+                <tr class="more-hikes-row">
+                  <td colspan="3" class="more-hikes-message">
+                    ... und {{ sortedHikes.length - maxVisibleHikes }} weitere Wanderungen
+                  </td>
                 </tr>
               }
             </tbody>

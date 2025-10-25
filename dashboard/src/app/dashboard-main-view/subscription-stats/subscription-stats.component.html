@@ -1,0 +1,224 @@
+<div class="toggle-container">
+  <mat-button-toggle-group 
+    [value]="selectedView" 
+    (change)="onViewChange($event.value)"
+    class="view-toggle-group">
+    <mat-button-toggle value="lifetime">Lifetime Subscriptions</mat-button-toggle>
+    <mat-button-toggle value="yearly">Yearly Subscriptions</mat-button-toggle>
+    <mat-button-toggle value="quarterly">Quarterly Subscriptions</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div class="stats-row">
+  @if (selectedView === 'lifetime') {
+    <div class="dashboard-card">
+    <div class="card-title">
+      Lifetime Subscriptions (vor 24. Juli 2025)
+    </div>
+    <div class="hike-count-container">
+      <div class="hike-count">{{ lifetimeSubscriptionTotal }} <span class="hike-label">Wanderungen</span></div>
+      <div class="pot-input-container">
+        <mat-form-field appearance="outline" class="pot-input-field">
+          <mat-label>Verteilt werden (CHF)</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="lifetimeSubscriptionPot"
+            placeholder="0"
+            min="0"
+            step="0.01"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    @if (lifetimeSubscriptionStats.length > 0) {
+      <table class="creator-stats-table">
+        <thead>
+          <tr>
+            <th>Creator</th>
+            <th>Anzahl</th>
+            <th>%</th>
+            <th>Anteil (CHF)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (stat of lifetimeSubscriptionStats; track stat.name) {
+            <tr>
+              <td>{{ stat.name }}</td>
+              <td>{{ stat.count }}</td>
+              <td>{{ stat.percent }}</td>
+              <td class="pot-share">{{ stat.potShare.toFixed(2) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+    </div>
+  }
+  
+  @if (selectedView === 'yearly') {
+    <div class="dashboard-card">
+    <div class="card-title">Yearly Subscriptions</div>
+    <div class="hike-count-container">
+      <div class="stats-column">
+        <div class="hike-count-section">
+          <div class="hike-count">{{ yearlySubscriptionTotal }} <span class="hike-label">Subscriptions</span></div>
+          <div class="total-revenue">
+            Gesamt: {{ yearlySubscriptionTotalRevenue.toFixed(2) }} CHF
+          </div>
+        </div>
+      </div>
+      <div class="inputs-column">
+        <div class="pot-input-container">
+          <mat-form-field appearance="outline" class="pot-input-field">
+            <mat-label>Preis pro Jahr (CHF)</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="yearlySubscriptionPrice"
+              placeholder="0"
+              min="0"
+              step="0.01"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="pot-input-field">
+            <mat-label>Anteil für Creator (%)</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="yearlySubscriptionCreatorShare"
+              placeholder="100"
+              min="0"
+              max="100"
+              step="1"
+            />
+          </mat-form-field>
+        </div>
+        <div class="date-input-container">
+          <mat-form-field appearance="outline" class="date-input-field">
+            <mat-label>Startdatum</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="yearlySubscriptionStartDate"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="date-input-field">
+            <mat-label>Enddatum</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="yearlySubscriptionEndDate"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    @if (yearlySubscriptionStats.length > 0) {
+      <table class="creator-stats-table">
+        <thead>
+          <tr>
+            <th>Creator</th>
+            <th>Ø Anteil Hikes</th>
+            <th>Anteil (CHF)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (stat of yearlySubscriptionStats; track stat.name) {
+            <tr>
+              <td>{{ stat.name }}</td>
+              <td>{{ stat.averageHikeShare.toFixed(1) }}%</td>
+              <td class="pot-share">{{ stat.potShare.toFixed(2) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="no-data">Noch nicht implementiert</div>
+    }
+    </div>
+  }
+  
+  @if (selectedView === 'quarterly') {
+    <div class="dashboard-card">
+    <div class="card-title">Quarterly Subscriptions (Herbstpass)</div>
+    <div class="hike-count-container">
+      <div class="stats-column">
+        <div class="hike-count-section">
+          <div class="hike-count">{{ quarterlySubscriptionTotal }} <span class="hike-label">Subscriptions</span></div>
+          <div class="total-revenue">
+            Gesamt: {{ quarterlySubscriptionTotalRevenue.toFixed(2) }} CHF
+          </div>
+        </div>
+      </div>
+      <div class="inputs-column">
+        <div class="pot-input-container">
+          <mat-form-field appearance="outline" class="pot-input-field">
+            <mat-label>Preis pro Quartal (CHF)</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="quarterlySubscriptionPrice"
+              placeholder="0"
+              min="0"
+              step="0.01"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="pot-input-field">
+            <mat-label>Anteil für Creator (%)</mat-label>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="quarterlySubscriptionCreatorShare"
+              placeholder="100"
+              min="0"
+              max="100"
+              step="1"
+            />
+          </mat-form-field>
+        </div>
+        <div class="date-input-container">
+          <mat-form-field appearance="outline" class="date-input-field">
+            <mat-label>Startdatum</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="quarterlySubscriptionStartDate"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="date-input-field">
+            <mat-label>Enddatum</mat-label>
+            <input
+              matInput
+              type="date"
+              [(ngModel)]="quarterlySubscriptionEndDate"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    @if (quarterlySubscriptionStats.length > 0) {
+      <table class="creator-stats-table">
+        <thead>
+          <tr>
+            <th>Creator</th>
+            <th>Ø Anteil Hikes</th>
+            <th>Anteil (CHF)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (stat of quarterlySubscriptionStats; track stat.name) {
+            <tr>
+              <td>{{ stat.name }}</td>
+              <td>{{ stat.averageHikeShare.toFixed(1) }}%</td>
+              <td class="pot-share">{{ stat.potShare.toFixed(2) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="no-data">Noch nicht implementiert</div>
+    }
+    </div>
+  }
+</div>
